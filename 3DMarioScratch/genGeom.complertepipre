@@ -1,0 +1,566 @@
+
+
+
+	function loadLevel(levelname){
+
+            
+			function generateGeometry(){
+				var geometry = new THREE.Geometry();
+				var selfGenGeom = new THREE.Geometry();
+				var pipes;
+				var dynamicGeom = new THREE.Geometry();
+    //            map[getblock(3,3,3)].air = false;
+								var uvs = [];
+                calculateMajorTriangle();
+								
+                function calculateMajorTriangle(){
+                for (var z = 1; z <= mapDepth; z++){
+                  for (var y = 1; y <= mapHeight; y++){
+                    for (var x = 1; x <= mapWidth; x++){
+                      /*nz is the conversion of fakez coordinates to realworld coordinates*/
+                      var nz = -z + 1;
+											var blockOffset = map[getblock(x,y,z)].offsetPOS;
+										
+											var blk = {
+												current: getblock(x  ,y  ,z  ), // id of current block
+												left:    getblock(x-1,y  ,z  ), // id of block left
+												right:   getblock(x+1,y  ,z  ), // id of block right
+												above:   getblock(x  ,y+1,z  ), // id of block above
+												below:   getblock(x  ,y-1,z  ), // id of block below
+												back:    getblock(x  ,y  ,z-1), // id of block it back
+												front:   getblock(x  ,y  ,z+1) // id of block in front
+											}
+											
+                      if (map[blk.current].air === false){
+										
+                        if (x > 1){
+                          if (map[blk.left].air === true & map[blk.current].faceEnab.left == true) {
+														
+													 var vertices=[];
+													 
+													 /*Calculates Vertices*/
+													 vertices[0] = new THREE.Vector3(x-1, y-1,    nz);
+													 vertices[1] = new THREE.Vector3(x-1, y  ,    nz);
+													 vertices[2] = new THREE.Vector3(x-1, y-1,  nz-1);
+													 vertices[3] = new THREE.Vector3(x-1, y  ,  nz-1);
+													
+													 /*Offsets The Vertices based on the block offset in the map*/
+													 vertices[0].add(blockOffset);
+													 vertices[1].add(blockOffset);
+													 vertices[2].add(blockOffset);
+													 vertices[3].add(blockOffset);
+													 
+														
+													 /*Pushes the Vertices to the Geometry*/
+													 selfGenGeom.vertices.push(vertices[0]);
+													 selfGenGeom.vertices.push(vertices[1]);
+													 selfGenGeom.vertices.push(vertices[2]);
+													 selfGenGeom.vertices.push(vertices[3]);
+													 
+													 /*Gets the correct uv for the material of the block*/
+													 uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 0));
+													 uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 1));
+													 uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 0));
+													 uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 1));
+													 
+													 /*Calculates the the offset of the specific instance of verttices and uv*/
+													 var offset = selfGenGeom.vertices.length - 4;
+													 var uvoffset = uvs.length - 4;
+													 
+													 /*Pushes The Faces to the geometry*/
+													 selfGenGeom.faces.push( new THREE.Face3( offset    , offset +1 , offset + 2 ) );
+													 selfGenGeom.faces.push( new THREE.Face3( offset + 1, offset +3 , offset + 2 ) );
+													 
+													 /*THESE UV MAPS DIFFER, because they are rotated*/
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 0], uvs[uvoffset + 1], uvs[uvoffset + 2]] );
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 3], uvs[uvoffset + 2]] );
+													 
+                          }
+                        }
+												if (x < mapWidth){
+													 if (map[blk.right].air === true & map[blk.current].faceEnab.right == true) {
+												
+														var vertices=[];
+														
+														vertices[0] = new THREE.Vector3(x, y  , nz  );
+														vertices[1] = new THREE.Vector3(x, y-1, nz  );
+														vertices[2] = new THREE.Vector3(x, y  , nz-1);
+														vertices[3] = new THREE.Vector3(x, y-1, nz-1);
+														
+														vertices[0].add(blockOffset);
+														vertices[1].add(blockOffset);
+														vertices[2].add(blockOffset);
+														vertices[3].add(blockOffset);
+														
+														selfGenGeom.vertices.push(vertices[0], vertices[1], vertices[2], vertices[3]);
+						
+														uvs.push(getUVmapCords(map[getblock(x,y,z)].materialID, 1,0));
+														uvs.push(getUVmapCords(map[getblock(x,y,z)].materialID, 1,1));
+													  uvs.push(getUVmapCords(map[getblock(x,y,z)].materialID, 0,0));
+														uvs.push(getUVmapCords(map[getblock(x,y,z)].materialID, 0,1));
+													 
+														var offset = selfGenGeom.vertices.length - vertices.length;
+														var uvoffset = uvs.length - vertices.length;
+													 
+														selfGenGeom.faces.push( new THREE.Face3( offset    , offset +1 , offset + 2 ) );
+														selfGenGeom.faces.push( new THREE.Face3( offset + 1, offset +3 , offset + 2 ) );
+													 
+														selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 3], uvs[uvoffset + 2], uvs[uvoffset + 1]] );
+														selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 2], uvs[uvoffset + 0], uvs[uvoffset + 1]] );
+													 
+                          }
+												}
+												if (y < mapHeight){
+													if (map[blk.above].air === true & map[blk.current].faceEnab.top == true) {
+                            
+														if (map[getblock(x,y,z)].materialID == 4){
+															map[getblock(x,y,z)].materialID = 5;
+														}
+														
+														var vertices=[];
+														 
+														vertices[0] = new THREE.Vector3(    x, y,       nz),
+														vertices[1] =	new THREE.Vector3((x-1), y,       nz),
+														vertices[2] =	new THREE.Vector3(    x, y,     nz-1),
+														vertices[3] = new THREE.Vector3((x-1), y,     nz-1)
+							
+														vertices[0].add(blockOffset);
+														vertices[1].add(blockOffset);
+														vertices[2].add(blockOffset);
+														vertices[3].add(blockOffset);
+													
+													  selfGenGeom.vertices.push(vertices[0]);
+												  	selfGenGeom.vertices.push(vertices[1]);
+													  selfGenGeom.vertices.push(vertices[2]);
+													  selfGenGeom.vertices.push(vertices[3]);
+												 
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 1));
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 1));
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 0));
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 0));
+													 
+													  if (map[getblock(x,y,z)].materialID == 5){
+															map[getblock(x,y,z)].materialID = 4;
+														}
+													 
+													 var offset = selfGenGeom.vertices.length - 4;
+													 var uvoffset = uvs.length - 4;
+													 
+													 selfGenGeom.faces.push( new THREE.Face3( offset    , offset +2 , offset + 1 ) );
+													 selfGenGeom.faces.push( new THREE.Face3( offset + 1, offset +2 , offset + 3 ) );
+													 
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 3]] );
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 3], uvs[uvoffset + 0], uvs[uvoffset + 2]] );
+													 
+													 
+													}
+												}
+												if (y > 1){
+														if (map[blk.below].air === true & map[blk.current].faceEnab.bottom == true) {
+															
+														if (map[getblock(x,y,z)].materialID == 4){
+															map[getblock(x,y,z)].materialID = 5;
+														}
+														
+														var vertices=[];
+															
+														vertices[0] = new THREE.Vector3(    x, (y -1),  nz),
+														vertices[1] = new THREE.Vector3(    x, (y -1), nz-1),
+														vertices[2] = new THREE.Vector3((x-1), (y -1),  nz),
+														vertices[3] = new THREE.Vector3((x-1), (y -1), nz-1)
+														
+														vertices[0].add(blockOffset);
+														vertices[1].add(blockOffset);
+														vertices[2].add(blockOffset);
+														vertices[3].add(blockOffset);
+														
+														selfGenGeom.vertices.push(vertices[0]);
+														selfGenGeom.vertices.push(vertices[1]);
+														selfGenGeom.vertices.push(vertices[2]);
+														selfGenGeom.vertices.push(vertices[3]);
+														
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 1));
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 0));
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 1));
+														uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 0));
+														
+												    if (map[getblock(x,y,z)].materialID == 5){
+															map[getblock(x,y,z)].materialID = 4;
+														}
+														
+													 var offset = selfGenGeom.vertices.length - 4;
+													 var uvoffset = uvs.length - 4;
+													 selfGenGeom.faces.push( new THREE.Face3( offset    , offset +2 , offset + 1 ) );
+													 selfGenGeom.faces.push( new THREE.Face3( offset + 1, offset +2 , offset + 3 ) );
+													 
+													 selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 0], uvs[uvoffset + 2], uvs[uvoffset + 1]] );
+													 selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 2], uvs[uvoffset + 3]] );
+													}
+												}
+												if (z > 1){
+													if (map[blk.back].air === true & map[blk.current].faceEnab.back == true) {
+													
+													var vertices = [];
+													
+  												vertices[0] = new THREE.Vector3(    x,      y, nz),
+													vertices[1] =	new THREE.Vector3(    x, (y -1), nz),
+													vertices[2] =	new THREE.Vector3((x-1),      y, nz),
+													vertices[3] =	new THREE.Vector3((x-1),  (y-1), nz)
+							
+												  vertices[0].add(blockOffset);
+													vertices[1].add(blockOffset);
+													vertices[2].add(blockOffset);
+													vertices[3].add(blockOffset);
+														
+													selfGenGeom.vertices.push(vertices[0]);
+													selfGenGeom.vertices.push(vertices[1]);
+													selfGenGeom.vertices.push(vertices[2]);
+													selfGenGeom.vertices.push(vertices[3]);
+													
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 1));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 0));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 1));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 0));
+													
+													
+													var offset = selfGenGeom.vertices.length - 4;
+													var uvoffset = uvs.length - 4;
+																	
+													selfGenGeom.faces.push( new THREE.Face3( offset    , offset +2 , offset + 1 ) );
+													selfGenGeom.faces.push( new THREE.Face3( offset + 1, offset +2 , offset + 3 ) );
+													
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 0], uvs[uvoffset + 2], uvs[uvoffset + 1]] );
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 2], uvs[uvoffset + 3]] );
+													
+													}
+												} else {
+													
+													var vertices = [];
+														
+													vertices[0] =	new THREE.Vector3(    x,      y, nz);
+													vertices[1]	= new THREE.Vector3(    x, (y -1), nz);
+													vertices[2] = new THREE.Vector3((x-1),      y, nz);
+													vertices[3] = new THREE.Vector3((x-1),  (y-1), nz);
+													
+													vertices[0].add(blockOffset);
+													vertices[1].add(blockOffset);
+													vertices[2].add(blockOffset);
+													vertices[3].add(blockOffset);
+													
+													selfGenGeom.vertices.push(vertices[0]);
+													selfGenGeom.vertices.push(vertices[1]);
+													selfGenGeom.vertices.push(vertices[2]);
+													selfGenGeom.vertices.push(vertices[3]);
+													
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 1));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 0));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 1));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 0));
+																
+													
+													var offset = selfGenGeom.vertices.length - 4;
+													var uvoffset = uvs.length - 4;
+													
+													selfGenGeom.faces.push( new THREE.Face3( offset    , offset +2 , offset + 1 ) );
+
+													
+													selfGenGeom.faces.push( new THREE.Face3( offset + 1, offset +2 , offset + 3 ) );
+													
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 0], uvs[uvoffset + 2], uvs[uvoffset + 1]] );
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 2], uvs[uvoffset + 3]] );
+
+											 }
+                      }
+											if ((map[blk.current].transparent === true)){
+												
+													var vertices = [];
+														
+													vertices[0] =	new THREE.Vector3(    x + (map[getblock(x,y,z)].blocksx -1),      y + (map[getblock(x,y,z)].blocksy -1), nz),
+													vertices[1]	= new THREE.Vector3(    x + (map[getblock(x,y,z)].blocksx -1),                                        y-1, nz),
+													vertices[2] = new THREE.Vector3(    x-1,                                        y + (map[getblock(x,y,z)].blocksy -1), nz),
+													vertices[3] = new THREE.Vector3(    x-1,                                                                          y-1, nz)
+													
+													vertices[0].add(blockOffset);
+													vertices[1].add(blockOffset);
+													vertices[2].add(blockOffset);
+													vertices[3].add(blockOffset);
+													
+													selfGenGeom.vertices.push(vertices[0]);
+													selfGenGeom.vertices.push(vertices[1]);
+													selfGenGeom.vertices.push(vertices[2]);
+													selfGenGeom.vertices.push(vertices[3]);
+													
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 1));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 1, 0));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 1));
+													uvs.push( getUVmapCords(map[getblock(x,y,z)].materialID, 0, 0));
+																
+													
+													var offset = selfGenGeom.vertices.length - 4;
+													var uvoffset = uvs.length - 4;
+													
+													selfGenGeom.faces.push( new THREE.Face3( offset    , offset +2 , offset + 1 ) );
+
+													
+													selfGenGeom.faces.push( new THREE.Face3( offset + 1, offset +2 , offset + 3 ) );
+													
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 0], uvs[uvoffset + 2], uvs[uvoffset + 1]] );
+													selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 2], uvs[uvoffset + 3]] );
+											}
+											if (map[blk.current].pipe === true){
+												 pipes1 = new THREE.CylinderGeometry( 0.8, 0.8, 2, 32 );
+												 pipes2 = new THREE.CylinderGeometry( 1, 1, 1, 32 );
+												 console.log("pipes");
+												 console.log(pipes);
+												 
+												 if (z <= 1 ) {
+												   pipe(7, new THREE.Vector3(x,y,z));
+												 }
+												 function pipe(height, position){
+													
+													var negative = [], nAngles = []; heightmid = [];
+													var x, y, z;
+													position.z = -Math.abs(position.z);
+													position.y = position.y -1;
+													heightmid[0] = 0;
+													heightmid[1] = height - 1;
+													heightmid[2] = height - 1;
+													heightmid[3] = height;
+													heightmid[4] = height;
+													heightmid[5] = height - 0.2;
+													heightmid[6] = height - 0.8;
+												
+													radius = [];
+													radius[0] = 0.8;
+													radius[1] = 0.8;
+													radius[2] = 1;
+													radius[3] = 1;
+													radius[4] = 0.8;
+													radius[5] = 0.8;
+													radius[6] = 0;
+											
+													segments = 8;
+													
+													thetaStart =  0;
+													thetaLength = Math.PI * 2;
+													
+													for ( i = 0; i <= (segments+2); i ++ ) {
+														for (q = 0; q < 7; q++){
+															var vertex = new THREE.Vector3();
+															var segment = thetaStart + i / segments * thetaLength;
+
+															vertex.x = radius[q] * Math.cos( segment ) + position.x;
+															vertex.y = heightmid[q] + position.y;
+															vertex.z = radius[q] * Math.sin( segment ) + position.z;
+														
+															console.log("xvertex x:" + vertex.x + "xvertex y:" + vertex.y + " xvertext z:" + vertex.z );
+															console.log(q);
+															selfGenGeom.vertices.push( vertex );
+														}
+														
+														uvs.push( getUVmapCords(15, 0, 0));
+														uvs.push( getUVmapCords(15, 0, 1));
+														uvs.push( getUVmapCords(15, 1, 0));
+														uvs.push( getUVmapCords(15, 1, 1));
+														
+														
+														if (i != 0){
+															var offsetRIGHT = selfGenGeom.vertices.length - (q * 2);
+															var offsetLEFTT = selfGenGeom.vertices.length - q;
+															var uvoffset = uvs.length - (q * 2);
+						
+															selfGenGeom.faces.push( new THREE.Face3( offsetLEFTT + 1, offsetLEFTT + 0, offsetRIGHT + 0));
+															selfGenGeom.faces.push( new THREE.Face3( offsetRIGHT + 1, offsetLEFTT + 1, offsetRIGHT + 0));
+															selfGenGeom.faces.push( new THREE.Face3( offsetRIGHT + 2, offsetLEFTT + 1, offsetRIGHT + 1));
+															selfGenGeom.faces.push( new THREE.Face3( offsetLEFTT + 2, offsetLEFTT + 1, offsetRIGHT + 2));
+															selfGenGeom.faces.push( new THREE.Face3( offsetLEFTT + 3, offsetLEFTT + 2, offsetRIGHT + 2));
+															selfGenGeom.faces.push( new THREE.Face3( offsetRIGHT + 2, offsetRIGHT + 3, offsetLEFTT + 3));
+															selfGenGeom.faces.push( new THREE.Face3( offsetRIGHT + 3, offsetRIGHT + 4, offsetLEFTT + 3));
+															selfGenGeom.faces.push( new THREE.Face3( offsetRIGHT + 4, offsetLEFTT + 4, offsetLEFTT + 3));
+															selfGenGeom.faces.push( new THREE.Face3( offsetRIGHT + 4, offsetLEFTT + 5, offsetLEFTT + 4));
+															selfGenGeom.faces.push( new THREE.Face3( offsetLEFTT + 5, offsetRIGHT + 4, offsetRIGHT + 5));
+															selfGenGeom.faces.push( new THREE.Face3( offsetLEFTT + 5, offsetRIGHT + 5, offsetRIGHT + 6));
+															
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 1], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+															selfGenGeom.faceVertexUvs[0].push( [uvs[uvoffset + 1], uvs[uvoffset + 0], uvs[uvoffset + 2]]);
+											
+														
+
+														}
+													}
+												 }
+											}
+                    }
+                  }
+                }
+									console.log(selfGenGeom);
+                }
+			
+							
+				selfGenGeom.computeFaceNormals();
+				selfGenGeom.mergeVertices();
+				selfGenGeom.computeVertexNormals();
+				
+			  console.log("adkjsagfas");
+				console.log(selfGenGeom);
+		//		geometry.faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
+		
+			var texture = new THREE.ImageUtils.loadTexture( "/textures/WorldTextureMap.png" );
+			texture.magFilter = THREE.NearestFilter;
+			texture.minFilter = THREE.LinearMipMapLinearFilter;
+			texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+			texture.repeat.set( 1, 1 );
+			texture.anisotropy = 1;
+			var platform_top = new THREE.MeshLambertMaterial({map: texture, alphaTest: 0.5});
+	  		var platform_topp = new THREE.MeshLambertMaterial({color: 0xFFFFFF, wireframe: true});
+				var pipemat = new THREE.MeshLambertMaterial({color: 0x00FF00});
+				
+				var material = new THREE.MeshPhongMaterial( { color: 0xDDDDDD, shininess: 30, metal: false, shading: THREE.FlatShading, wireframe: true} );
+				GameObject.WorldGeom = {STATIC: new THREE.Mesh( selfGenGeom, platform_top ), DYNAMIC:null};
+				
+				GameObject.WorldGeom.STATIC.castShadow = true;
+				GameObject.WorldGeom.STATIC.receiveShadow = true;
+			//	GameObject.WorldGeom.position.y = -8;
+			//	GameObject.WorldGeom.position.x = -8;
+			//	GameObject.WorldGeom.position.z = 0;
+		//		var hill = GameObject.Hill(new THREE.Vector3(3,3.5,-3));
+	//			var bush = GameObject.Bush(new THREE.Vector3(12,2.5,-2));
+	
+			
+				var pipmesh1 = new THREE.Mesh(pipes1, pipemat);
+				var pipmesh2 = new THREE.Mesh(pipes2, pipemat);
+				pipmesh1.position.y += 3;
+				pipmesh1.position.x += 3;
+				pipmesh1.position.z -= 1;
+				
+				pipmesh2.position.y += 3.5;
+				pipmesh2.position.x += 3;
+				pipmesh2.position.z -= 1;
+				
+				scene.add(GameObject.WorldGeom.STATIC);
+			
+			}
+		
+			function showGrids(sizeX, sizeY){
+                
+                sizeX /= 2;
+                sizeY = sizeX;
+            
+				var step  =  1;
+				
+				var geometry = new THREE.Geometry();
+				var material = new THREE.LineBasicMaterial({color: 'white'});
+				
+				for (var i = -sizeX; i < sizeX; i+= step){
+					geometry.vertices.push(new THREE.Vector3(-  sizeX, i, 0.01));
+					geometry.vertices.push(new THREE.Vector3( sizeX, i, 0.01));
+				}
+				for (var i = -sizeY; i < sizeY; i+= step){
+					geometry.vertices.push(new THREE.Vector3( i, -sizeY, 0.01));
+					geometry.vertices.push(new THREE.Vector3(  i, sizeY, 0.01));
+				}
+				
+				var line = new THREE.Line( geometry, material, THREE.LinePieces);
+				line.position.x += sizeX;
+				line.position.y += sizeY;
+				line.position.z = -1;
+				scene.add(line);
+			}
+						//*PLZZPLLZZ Fix me MAx. I am broken ;( I cri erytime i dont work*/
+						function getUVmapCords(materialID, u, v){
+							var ppb = 16;
+							var blocksInRow = textureWidth / ppb;
+							var material = [];
+							material[0]  = {pos: new THREE.Vector2(1,9), l: 1, h: 1};
+							material[1]  = {pos: new THREE.Vector2(2,9), l: 1, h: 1};
+							material[2]  = {pos: new THREE.Vector2(3,9), l: 1, h: 1};
+							material[3]  = {pos: new THREE.Vector2(1,8), l: 1, h: 1};
+							material[4]  = {pos: new THREE.Vector2(2,8), l: 1, h: 1};
+							material[5]  = {pos: new THREE.Vector2(3,8), l: 1, h: 1};
+							material[6]  = {pos: new THREE.Vector2(1,7), l: 1, h: 1};
+							material[7]  = {pos: new THREE.Vector2(2,7), l: 1, h: 1};
+					    material[8]  = {pos: new THREE.Vector2(1,5), l: 4, h: 1};
+							material[9]  = {pos: new THREE.Vector2(5,4), l: 5, h: 2 + 3/16};
+							material[10] = {pos: new THREE.Vector2(6,5), l: 3, h: 1 + 3/16};
+							material[11] = {pos: new THREE.Vector2(1,4), l: 3, h: 1};
+							material[12] = {pos: new THREE.Vector2(1,3), l: 3, h: 1};
+							material[13] = {pos: new THREE.Vector2(1.5,5), l: 2, h: 1};
+							material[14] = {pos: new THREE.Vector2(2.5,3), l: 1, h: 1};
+							material[15] = {pos: new THREE.Vector2(3,7), l: 1, h: 1};
+							material[16] = {pos: new THREE.Vector2(4,7), l: 1, h: 1};
+							material[17] = {pos: new THREE.Vector2(1,6), l: 1, h: 1};
+							material[18] = {pos: new THREE.Vector2(2,6), l: 1, h: 1};
+			        
+							material[materialID].h--;
+							material[materialID].l--;
+							u--;
+							v--;
+							
+							var realU = ((material[materialID].pos.x + u + (material[materialID].l * (u + 1)))* ppb) / textureWidth ;
+							var realV = ((material[materialID].pos.y + v + (material[materialID].h * (v + 1)))* ppb) / textureHeight;
+							
+							var realUV = new THREE.Vector2(realU, realV);
+							//console.log(realUV);
+							return realUV;
+							
+						}
+						
+						function get_Material_Id_If_MultiBlock(){
+							
+						}
+            
+            function getblock(x, y, z){
+              /*This Formula Calculates the Id number, based on a position entered*/
+              var id = (((y - 1) * mapWidth + (x -1)) + (mapWidth * mapHeight * (z -1)));
+              return id;
+            }
+            
+		
+						var blocktexture = THREE.ImageUtils.loadTexture( "/textures/WorldTextureMap.png",
+						{
+							magFilter: THREE.NearestFilter,
+							minFilter: THREE.NearestFilter,
+							flipY: false,
+							wrapS: THREE.ClampToEdgeWrapping,
+							wrapT: THREE.ClampToEdgeWrapping
+						},
+						function(texturemap){
+							textureWidth = texturemap.image.width;
+							textureHeight = texturemap.image.height;
+							console.log("textywexy wdth: "+textureWidth+" tashasdheight:"+textureHeight);
+					//		generateGeometry();
+			    //    showGrids(textureWidth, textureHeight);
+							getMap();
+						}
+		
+					);
+					
+						function getMap(){
+							var xmlhttp = new XMLHttpRequest();
+							var url = levelname;
+
+							xmlhttp.onreadystatechange = function() {
+								if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+										var myArr = JSON.parse(xmlhttp.responseText);
+										map      = myArr.blocks;
+										mapWidth = myArr.mapWidth;
+										mapHeight= myArr.mapHeight;
+										mapDepth = myArr.mapDepth;
+										console.log(myArr);
+										generateGeometry();
+								}
+							}
+							xmlhttp.open("GET", url, true);
+							xmlhttp.send();
+							
+						}
+	}

@@ -1,0 +1,19 @@
+<html>
+	<head>
+		<title>My first Three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="/js/threejs.min.js"></script>
+		<script src="track.js"></script>
+		<script src="/3DMarioScratch/convert.js"></script>
+		<div>Upload an image</div>
+		<input id="imageuploaderpoop" type="file" onchange="previewFile()"><br>
+		<img src="" height="200" alt="Image preview...">
+		<div>Click the Download button and Link to get your map file. Store it in a safe place</div>
+		<textarea id="textbox">Type something here</textarea> <button id="create">Create file</button> <a id="downloadlink" style="display: none">Download</a>
+  	</body>
+</html>

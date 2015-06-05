@@ -1,0 +1,613 @@
+<html>
+	<head>
+		<title>DNA</title>
+		<meta charset="UTF-8">
+		<style>
+			body {
+				margin: 0;
+				background-color: #7F83E7;
+				cursor: default;
+			}
+			canvas {
+				width: 100%;
+				height: 100%;
+				color: #7F83E7;
+				background-color: #7F83E7;
+			}
+						
+			@font-face {
+				font-family: 'Press Start';
+				src: url('prstart/prstart.eot'); /* IE9 Compat Modes */
+				src: url('prstart/prstart.eot') format('embedded-opentype'), /* IE6-IE8 */
+					url('prstart/prstart.woff2') format('woff2'), /* Super Modern Browsers */
+					url('prstart/prstart.woff') format('woff'), /* Pretty Modern Browsers */
+					url('prstart/prstart.ttf')  format('truetype'), /* Safari, Android, iOS */
+					url('prstart/prstart.svg#Press Start') format('svg'); /* Legacy iOS */
+			}
+			canvas {
+				margin-left: auto;
+				margin-right: auto;
+			
+			}
+			
+			#score {
+				position: absolute;
+				float: right;
+				top: 6%;
+				left: 2%;
+				z-index: 5;
+				font-family: Press Start;
+				font-size: 30px;
+				color: FFF;
+			}
+			
+			#player {
+				position: absolute;
+				float: right;
+				top: 2%;
+				left: 2%;
+				z-index: 5;
+				font-size: 30px;
+				font-family: Press Start;
+				color: FFF;
+			}
+			
+			#pauseMenu{
+				position: absolute;
+				top: 0px;
+				background-color: #000;
+				width: 100%;
+				height: 100%;
+				opacity:0.8;
+				visibility: hidden;
+			}
+			
+			#innermenu{
+				position: absolute;
+				left: 40%;
+				right: 40%;
+				top:40%;
+				bottom:40%;
+				height: 20%;
+				width:	20%;
+				opacity: 1;
+				color: white;
+				font-size: 30px;
+			}
+			
+			.resume{
+				text-align: center;
+				padding: 2%;
+			}
+			#reticle{
+				position: absolute;
+				top: 50%;
+				left: 45%;
+				width: 10%;
+				height:20%;
+				text-size: 100%;
+				text-align: center;
+			}
+			
+			#innerReticle{
+				vertical-align: middle;
+				line-height: 10%;
+			}
+			
+			#sidebarMat{
+				position: absolute;
+				float: right;
+				top: 50%;
+				right: 0px;
+				margin-left: 4px;
+				background-color: #AAAAAA;
+				opacity: 0.7;
+				padding-left: 4px;
+				padding-top: 4px;
+				border-radius: 4px;
+			}
+			
+			.materialIcon:hover{
+				color: blue;
+				cursor: pointer;
+				opacity: 1.0;
+			}
+			
+			#devtool{
+				position: absolute;
+				float: right;
+				right: 0px;
+				background-color: #AAA;
+				text-align: center;
+				width: 100px;
+				border-radius: 4px;
+			}
+			
+			#devtool:hover{
+				cursor: pointer;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="player">MARIO</div>
+		<div id="score">0000000</div>
+		<div id="reticle">
+			<div id="innerReticle">
+				+
+			</div>
+		</div>
+		<div id="pauseMenu">
+			<div id="innermenu">
+				<div class="resume">Resume</div>
+				<div class="resume">Options</div>
+				<div class="resume">MainMenu</div>
+			</div>
+			<div>
+				Camera;
+			</div>
+		</div>
+		<div id="devtool" onclick="GameObject.Developer.SaveDEVCAM()">
+			Save Cam
+		</div>
+		<div id="sidebarMat">
+			<img src="textures/platform-top.png" 	 class="materialIcon" onclick="changeCreativeMaterial(0)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(1)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(2)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(3)">
+			<br>
+			<img src="textures/platform-q.png" class="materialIcon" onclick="changeCreativeMaterial(4)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(5)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(6)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(7)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(8)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(9)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(10)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(11)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(12)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(13)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(14)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(15)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(16)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(17)">
+			<br>
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(18)">
+			<img src="textures/platform-brick.png" class="materialIcon" onclick="changeCreativeMaterial(19)">
+			<br>
+		</div>
+		
+		<script type="text/javascript" src="js/threejs.min.js"></script>
+		<script type="text/javascript" src="GameObjects.js"></script>
+		<script type="text/javascript" src="3DMarioScratch/genGeom.js"></script>
+		<script type="text/javascript" src="3DMarioScratch/track.js"></script>
+		<script type="text/javascript" src="world1-1-Ground.js"></script>
+		<script type="text/javascript" src="shaders/vertex.js"></script>
+		<script type="text/javascript" src="3DMarioScripts/CreatePhysicsBody.js"></script>
+		<script type="text/javascript" src="3DMarioScripts/CreateGoomba.js"></script>
+		<script type="text/javascript" src="3DMarioScripts/DeveloperMode.js"></script>
+		<script type="text/javascript" src="CreateAnimatedBlock.js"></script>
+		<script type="text/javascript" src="MarioPlayer.js"></script>
+		<script type="text/javascript" src="MarioPhysics.js"></script>
+		<script type="text/javascript" src="coordinates.js"></script>
+		<script type="text/javascript" src="js/physi.js"></script>
+		<script type="text/javascript" src="js/cannon.min.js"></script>
+		<script type="text/javascript" src="js/keyboard.js"></script>
+		<script type="text/javascript" src="js/FirstPersonControls.js"></script>
+		<script type="text/javascript" src="js/pointerlock.js"></script>
+		<script type="text/javascript" src="shaders/shaders.js"></script>
+		<script type="x-shader/x-fragment" id="marioFragmentShader" src="shaders/mario.vsh">
+
+			uniform sampler2D texture;
+			varying vec2 vUV;
+
+			vec4 pack_depth( const in float depth ) {
+
+				const vec4 bit_shift = vec4( 256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0 );
+				const vec4 bit_mask  = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
+				vec4 res = fract( depth * bit_shift );
+				res -= res.xxyz * bit_mask;
+				return res;
+
+			}
+
+			void main() {
+
+				vec4 pixel = texture2D( texture, vUV );
+
+				if ( pixel.a < 0.5 ) discard;
+
+				gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
+
+			}
+		</script>
+		<!--Vertex Shader-->
+		<script type="x-shader/x-vertex" id="marioVertexShader">
+			varying vec2 vUV;
+
+			void main() {
+
+				vUV = uv;
+
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+				gl_Position = projectionMatrix * mvPosition;
+
+			}
+		</script>
+		<script type="text/javascript" src="loaders/loadShaders.js"></script>
+		<script>
+		
+			var world, body, mass, shape, timeStep=1/60, phsy_ground, cooldown, switchCam = 1;
+			var scene, camera2d, camera3d, cameraDEV, camera3dScroll, cameraPointer, renderer, clock, povControls, devControls;
+			var player1, bush = [], hill = [];
+			var keyboard	= new THREEx.KeyboardState();
+			var acceleration = 1, acceleration2 = 1;
+			var forceHorizontal = 0, forceVertical;
+			var pauseMenu = document.getElementById( 'pauseMenu' );
+			
+			pauseMenu.hidden = true;
+			
+			var screenWidth = window.innerWidth;
+			var screenHeight = window.innerHeight;
+			
+			GameObject.ActiceCamera = 0;
+			GameObject.creativeMaterial = 0;
+			console.log(screenWidth + "/" + screenHeight)
+			
+			var raycaster = new THREE.Raycaster();
+			var mouse = new THREE.Vector2();
+			
+			var map = [];
+			var mapWidth, mapHeight, mapDepth;
+			var textureWidth, textureHeight;
+			
+			GameObject.PhysicsClock = new THREE.Clock();
+			GameObject.PhysicsMario_Acceleration = new THREE.Vector2(0,0);
+			GameObject.PhysicsMario_Velocity = new THREE.Vector2(0,0);
+			GameObject.PhysicsMario_Position = new THREE.Vector2(0.0625,2.5);
+			GameObject.PhysicsMario_Direction = "forward";
+			
+			
+			loadTextures();
+			function loadTextures(){
+				GameObject.GetWorldTextureMap();
+				GameObject.GetMarioTextureMap();
+				GameObject.GetGoombaMap();
+				init();
+			}
+			
+			/*Inital functuions after done loading map*/
+			function init(){
+				initTHREEjs();
+				generateLevelObjects();
+				GameObject.PhysicsUpdate();
+				animate();
+			}
+			/*Initates three.js objects*/
+			function initTHREEjs(){
+				scene = new THREE.Scene();
+				camera2d = new THREE.OrthographicCamera( -screenWidth /128, screenWidth /128, screenHeight /128, -screenHeight /128, 0.01, 1000 );
+				camera3d = new THREE.PerspectiveCamera( 90, (screenWidth/screenHeight), 0.1, 1000);
+				cameraDEV = new THREE.PerspectiveCamera( 95, screenWidth/screenHeight, 0.1, 1000 );
+				cameraPointer = new THREE.PerspectiveCamera( 95, screenWidth/screenHeight, 0.1, 1000 );
+				camera3dScroll = new THREE.PerspectiveCamera( 90, screenWidth/screenHeight, 0.1, 1000 );
+				povControls = new THREE.FirstPersonControls(camera3d);
+				
+				var mouseVector = new THREE.Vector2();
+				var raycaster = new THREE.Raycaster();
+				
+				povControls.lookSpeed = 0.4;
+				povControls.movementSpeed = 20;
+				povControls.noFly = true;
+				povControls.lookVertical = true;
+				povControls.activeLook = true;
+				povControls.constrainVertical = false;
+				povControls.verticalMin = 1.0;
+				povControls.verticalMax = 2.0;
+				povControls.lon = -150;
+				povControls.lat = 120;
+				povControls.autoForward = true;
+				
+				GameObject.upad = 0;
+				GameObject.GoombaUpdateLoop();
+				
+				clock = new THREE.Clock();
+				renderer = new THREE.WebGLRenderer();
+				console.log(renderer);
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				document.body.appendChild( renderer.domElement );
+				renderer.setClearColor (0x7F83E7, 1);
+				renderer.shadowMapEnabled = true;
+				renderer.shadowMapType = THREE.PCFShadowMap;
+				devControls = new THREE.TrackballControls( cameraDEV, renderer.domElement );
+				
+				renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
+				renderer.domElement.mozRequestPointerLock ||
+				renderer.domElement.webkitRequestPointerLock;
+
+				renderer.domElement.requestPointerLock()
+				
+				var pointerluck = new THREE.PointerLockControls( cameraPointer );
+				scene.add( pointerluck.getObject() );
+				pointerluck.enabled = true;
+
+				window.addEventListener( 'mousemove', onMouseMove, false );
+				window.addEventListener( 'mousedown', onMouseDown, true  );
+				window.addEventListener( 'resize', onWindowResize, false );
+				document.addEventListener('pointerlockchange', changeCallback, false);
+        document.addEventListener('mozpointerlockchange', changeCallback, false);
+        document.addEventListener('webkitpointerlockchange', changeCallback, false);
+				document.addEventListener("mousemove", this.moveCallback, false);
+			}
+			
+			function changeCallback(){
+				
+			}
+			
+			/*Updates camera positions when window size changes*/
+			function onWindowResize() {
+
+				screenWidth = window.innerWidth;
+				screenHeight = window.innerHeight;
+
+				camera2d = new THREE.OrthographicCamera( -screenWidth /128, screenWidth /128, screenHeight /128, -screenHeight /128, 0.01, 1000 );
+				camera3d = new THREE.PerspectiveCamera( 95, 600/600, 0.1, 1000);
+				cameraDEV = new THREE.PerspectiveCamera( 95, screenWidth/screenHeight, 0.1, 1000 );
+				camera3dScroll = new THREE.PerspectiveCamera( 90, screenWidth/screenHeight, 0.1, 1000 );
+				
+				cameraDEV.position.z = 8;
+				cameraDEV.position.x = screenWidth/128;
+				cameraDEV.position.y = screenHeight/128;
+				
+				camera2d.position.z = 1;
+				camera2d.position.x = screenWidth/128;
+				camera2d.position.y = screenHeight/128;
+				
+				camera3dScroll.position.z = 8.25;
+				camera3dScroll.position.y = 8.25;
+				camera3dScroll.position.x = screenWidth/16/10 + 5;
+				
+				
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+			
+			/*Creates instance of level objects in the scene (needs work)*/
+			function generateLevelObjects(){
+				var DirectionalLight, AmbientLight;
+				
+				/*Creates Sunlight*/
+				DirectionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+				DirectionalLight.position.set(1, 0.5, 1).normalize();
+				DirectionalLight.castShadow = true;
+				DirectionalLight.shadowBias = 0.0001;
+				DirectionalLight.shadowDarkness = 0.5;
+
+				var spotLight =  new THREE.SpotLight( 0xffffff );
+				spotLight.position.set( 110, 100, 100);
+		//		spotLight.rotation.set( 0, Math.PI, 0 );
+				spotLight.angle = 120 * Math.PI / 180;
+				spotLight.exponent = 0.2;
+				spotLight.shadowBias = 0.0001;
+		//		spotLight.target.position.set( 0, 7, -7 );
+				spotLight.castShadow = true;
+				spotLight.shadowMapHeight =5024;
+				spotLight.shadowMapWidth = 5024;
+				spotLight.intensity = 2.0;
+				spotLight.shadowDarkness = 0.8;
+				spotLight.shadowCameraNear = 100;
+				spotLight.shadowCameraFov = 25;
+				spotLight.shadowCameraFar = 10000;
+				spotLight.shadowCameraLeft = 1000; // or whatever value works for the scale of your scene
+				spotLight.shadowCameraRight = 1000;
+				spotLight.shadowCameraTop = 16;
+				spotLight.shadowCameraBottom = 16;
+				console.log(spotLight);
+				var sphere = new THREE.Mesh( new THREE.SphereGeometry( 0.5, 32, 32 ),  new THREE.MeshBasicMaterial( {color: 0xffff00} ) );
+				sphere.position.copy(spotLight.position);
+				console.log("hmhmhmhmhmhm");
+				console.log(sphere.position);
+				
+				scene.add( spotLight, sphere );
+
+				/*Creates Ambient Light*/
+				AmbientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
+	//			scene.add( AmbientLight );
+				
+				/*Creates Player(s)*/
+				player1 = new GameObject.Player(new THREE.Vector3(3, 9.5, 1));
+				player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
+				
+				/*Creates Goomba*/
+				GameObject.CreateGoomba();
+				
+		//		GameObject.Developer.showGrids();
+				
+				/*Creates Block reticle*/
+				GameObject.reticleAdd = new THREE.Mesh(new THREE.BoxGeometry( 1.1, 1.1, 1.1 ), new THREE.MeshBasicMaterial( { color: 0xffff00, transparent: true, opacity: 0.5, wireframe: true} ));
+				
+				/*Adds Objects to the scene*/
+				scene.add( player1.mesh, GameObject.reticleAdd );
+		
+				/*Initial Camera 2d position*/
+				camera2d.position.z = 1;
+				camera2d.position.x = screenWidth/128;
+				camera2d.position.y = screenHeight/128;
+				
+				/*Initial Camera 3d position*/
+				camera3d.position.z = 6.9;
+				camera3d.position.y -= 1;
+				camera3d.rotation.z -= Math.PI/2;
+				camera3d.position.x -= 2;
+				camera3d.position.z -= 2;
+				
+				/*Initital Camera Dev position*/
+				
+					GameObject.getCookie = function(cname) {
+						var name = cname + "=";
+						var ca = document.cookie.split(';');
+						for(var i=0; i<ca.length; i++) {
+								var c = ca[i];
+								while (c.charAt(0)==' ') c = c.substring(1);
+								if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+						}
+						return "";
+					}
+				console.log(cameraDEV.matrix.elements);
+				console.log("cookie:");
+				console.log(GameObject.getCookie("devCamMatrx"));
+				cameraDEV.position.z = 5;
+				if (GameObject.getCookie("devCamPosx") != undefined & GameObject.getCookie("devCamPosy") != undefined & GameObject.getCookie("devCamPosz") != undefined & GameObject.getCookie("devCamRotx") != undefined & GameObject.getCookie("devCamRoty") != undefined & GameObject.getCookie("devCamRotz") != undefined & GameObject.getCookie("devCamTargx")!= undefined & GameObject.getCookie("devCamTargy")!= undefined & GameObject.getCookie("devCamTargz")!= undefined){
+					cameraDEV.position.x = GameObject.getCookie("devCamPosx");
+					cameraDEV.position.y = GameObject.getCookie("devCamPosy");
+					cameraDEV.position.z = GameObject.getCookie("devCamPosz");
+					cameraDEV.rotation.x = GameObject.getCookie("devCamRotx");
+					cameraDEV.rotation.y = GameObject.getCookie("devCamRoty");
+					cameraDEV.rotation.z = GameObject.getCookie("devCamRotz");
+				//	devControls.target.set(GameObject.getCookie("devCamTargx"), GameObject.getCookie("devCamTargy"), GameObject.getCookie("devCamTargz"));
+				} else {
+					cameraDEV.position.x = 0;
+					cameraDEV.position.y = 0;
+					cameraDEV.position.z = 5;
+					cameraDEV.rotation.x = 0;
+					cameraDEV.rotation.y = 0;
+					cameraDEV.rotation.z = 0;
+			//		devControls.target = new THREE.Vector3(0,0,0);
+				}
+				cameraDEV.position.z += 5;
+				console.log(cameraDEV);
+				/*
+									cameraDEV.position.x = 16;
+					cameraDEV.position.y = 16;
+					cameraDEV.position.z = 5;
+					cameraDEV.rotation.x = 0;
+					cameraDEV.rotation.y = 0;
+					cameraDEV.rotation.z = 0;*/
+				
+				/*Initital Camera 3d scroll position*/
+				camera3dScroll.position.z = 8.25;
+				camera3dScroll.position.y = 8.25;
+				camera3dScroll.position.x = 13.5;
+				
+				/*loads .mario level file*/
+				loadLevel("/maps/w1-1.mario");
+			}
+			
+			/*Render/CameraLOOP- Updates image on screen*/
+			function animate() {
+				requestAnimationFrame( animate );
+				updateCameraLocation();
+				render();
+				
+				/*Updates All* Camera Locations*/
+				function updateCameraLocation() {
+					var delta = clock.getDelta();
+					povControls.update(delta);
+					devControls.update();
+
+					camera3d.position.copy(player1.mesh.position);
+					camera3d.position.y += 0.6;
+					if (player1.mesh.position.x > screenWidth/128) {
+						camera2d.position.x = player1.mesh.position.x;
+						camera3dScroll.position.x = player1.mesh.position.x;
+					}
+				}
+				
+				/*Renders scene to canvas*/
+				function render () {
+					GameObject.WorldGeom.FORAGE.material.uniforms["time"].value +=1;
+					renderer.render(scene, camera3dScroll);
+				};
+			}
+			
+			
+			function getblock(x, y, z){
+				/*This Formula Calculates the Id number of a block, based on a position entered*/
+				var id = (((y - 1) * mapWidth + (x -1)) + (mapWidth * mapHeight * (z -1)));
+				return id;
+			}
+			
+			/*Shoots a ray from mouse to see where mouse hovers over*/
+			function onMouseMove( event ) {
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				
+				raycaster.setFromCamera( mouse, camera3dScroll);
+
+				var objects = [];
+				objects[0] = GameObject.WorldGeom.STATIC;
+				objects[1] = GameObject.WorldGeom.DYNAMIC;
+				
+				var intersects = raycaster.intersectObjects(objects);
+				if (intersects.length > 0){
+					console.log(intersects[0]);
+					if (map[getblock(Math.ceil(intersects[0].point.x + 0.01), Math.ceil(intersects[0].point.y), 1)].dynamic == true){
+						GameObject.reticleAdd.visible = true;
+						GameObject.reticleAdd.position.x = Math.ceil(intersects[0].point.x) -0.5;
+						GameObject.reticleAdd.position.y = Math.ceil(intersects[0].point.y) - 0.5;
+						GameObject.reticleAdd.position.z = Math.ceil(intersects[0].point.z) - 1;
+					} else{
+						GameObject.reticleAdd.visible = true;
+						GameObject.reticleAdd.position.x = Math.ceil(intersects[0].point.x) - 0.5;
+						GameObject.reticleAdd.position.y = Math.ceil(intersects[0].point.y) - 0.5;
+						GameObject.reticleAdd.position.z = Math.ceil(intersects[0].point.z) - 0.5;
+					}
+				} else {
+					GameObject.reticleAdd.visible = false;
+				}
+				
+	
+			}
+			
+			function changeCreativeMaterial(id){
+				GameObject.creativeMaterial = id;
+			}
+			
+			/*If mouse clicked, adds or deletes block from map*/
+			function onMouseDown( event ){
+					var objects = [];
+					objects[0] = GameObject.WorldGeom.STATIC;
+					objects[1] = GameObject.WorldGeom.DYNAMIC;
+					var intersects = raycaster.intersectObjects(objects);
+					if (intersects.length > 0){
+					
+						if (event.which == 3){
+						 console.log(Math.abs(Math.ceil(intersects[0].point.z) + 1));
+						 map[getblock(
+								Math.ceil(intersects[0].point.x),
+								Math.ceil(intersects[0].point.y),
+								Math.abs(Math.ceil(intersects[0].point.z)) + 1
+						 )].air = true;
+						}
+						if (event.which == 1){
+						 console.log(Math.abs(Math.ceil(intersects[0].point.z) + 1));
+						 var bluck = map[getblock(
+								Math.ceil(intersects[0].point.x),
+								Math.ceil(intersects[0].point.y + 1),
+								Math.abs(Math.ceil(intersects[0].point.z)) + 1
+						 )]
+						 if(bluck.air == true){
+							bluck.air = false;
+							bluck.materialID = GameObject.creativeMaterial;
+							bluck.dynamic = false;
+						 }
+						}
+						scene.remove(GameObject.WorldGeom.STATIC);
+						scene.remove(GameObject.WorldGeom.FORAGE);
+						scene.remove(GameObject.WorldGeom.DYNAMIC);
+						GameObject.Regenerate();
+					}
+					
+			}
+		
+		</script>
+	</body>
+</html>
