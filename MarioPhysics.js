@@ -1,7 +1,7 @@
 /*Physics Engine Based on http://s276.photobucket.com/user/jdaster64/media/smb_playerphysics.png.html*/
-
+/*This whole thing needs to be rewritten. Its been very poorly written*/
 GameObject.PhysicsUpdate = function(){
-		setTimeout(function(){ 
+		setTimeout(function(){
 	  	if (keyboard.pressed("L")){
 				console.log("----------------");
 				console.log("NewDelta:" + GameObject.PhysicsNewDelta);
@@ -20,7 +20,7 @@ GameObject.PhysicsUpdate = function(){
 				} else if (GameObject.PhysicsMario_Velocity.x < 0 & GameObject.PhysicsMario_Direction == "forward"){
 					GameObject.PhysicsMario_Direction = "backward";
 					player1.updateTexture(0, GameObject.PhysicsMario_Direction);
-				} 
+				}
 				
 			if (ifBlock("down") & GameObject.PhysicsMario_Velocity.y < 0){
 				var forceBottom = Math.abs(forceTop);
@@ -129,7 +129,7 @@ GameObject.PhysicsUpdate = function(){
 			}
 			GameObject.PhysicsMario_OldAcceleration = GameObject.PhysicsMario_Acceleration;
 			GameObject.PhysicsMario_Acceleration = new THREE.Vector2(totalforceX, totalforceY);
-			GameObject.PhysicsMario_AverageAcceleration = new THREE.Vector2( 
+			GameObject.PhysicsMario_AverageAcceleration = new THREE.Vector2(
 					(GameObject.PhysicsMario_Acceleration.x + GameObject.PhysicsMario_OldAcceleration.x) / 2,
 					(GameObject.PhysicsMario_Acceleration.y + GameObject.PhysicsMario_OldAcceleration.y) / 2
 			);
@@ -240,7 +240,7 @@ GameObject.PhysicsUpdate = function(){
 				if (keyboard.pressed("W") & block.up == false){
 					forceHorizontal += 1 + GameObject.PhysicsNewDelta * 60;
 					console.log(forceHorizontal);
-				} 
+				}
 				if (block.down  == false){
 					forceHorizontal -= (0.1) * forceHorizontal;
 				}
@@ -257,7 +257,7 @@ GameObject.PhysicsUpdate = function(){
 
          player1.mesh.position.y = forceHorizontal;
 				 GameObject.PhysicsOldDelta = GameObject.PhysicsClock.getDelta();
-			} 
+			}
 			
 			function convertToNumber(input){
 					
