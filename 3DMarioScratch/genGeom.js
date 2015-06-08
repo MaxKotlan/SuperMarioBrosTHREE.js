@@ -1,7 +1,11 @@
-
+/**
+ * @author MaxKotlan / http://mkdownloads.info/
+*/
+   
+   /*function loads a .mario level*/
 	function loadLevel(levelname){
 
-            
+         /*Function generates/ regenerates all Geometry*/
 			GameObject.Regenerate = function (){
 				var geometry = new THREE.Geometry();
 				var selfGenGeom = new THREE.Geometry();
@@ -12,7 +16,8 @@
     //            map[getblock(3,3,3)].air = false;
 								var uvs = [];
                 calculateMajorTriangle();
-								
+							
+					/*Converts map data to faces, and vertices*/
                 function calculateMajorTriangle(){
                 for (var z = 1; z <= mapDepth; z++){
                   for (var y = 1; y <= mapHeight; y++){
@@ -467,6 +472,7 @@
 
 			var oldVERT = selfGenGeom.vertices;
 	
+	      /*Computes the normals, and merges vertices for all geometry*/
 			selfGenGeom.computeFaceNormals();
 			selfGenGeom.mergeVertices();
 			selfGenGeom.computeVertexNormals();
@@ -487,9 +493,11 @@
 			texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 			texture.repeat.set( 1, 1 );
 			texture.anisotropy = 1;
-	  	var platform_topp = new THREE.MeshLambertMaterial({map: GameObject.WorldTextureMap, color:0xFFFFFF, alphaTest: 0.5});
-	  //		var platform_top = new THREE.MeshLambertMaterial({color: 0xFF0000, wireframe: true});
+			/*material(shader) of blocks*/
+	  	   var platform_topp = new THREE.MeshLambertMaterial({map: GameObject.WorldTextureMap, color:0xFFFFFF, alphaTest: 0.5});
+	      //var platform_top = new THREE.MeshLambertMaterial({color: 0xFF0000, wireframe: true});
 	
+	      /*Custom Shader(written in glsl) applies to bushes, trees*/
 			var platform_top = new THREE.ShaderMaterial({
 				uniforms: {
 					"tDiffuse": { type: "t", value: GameObject.WorldTextureMap },
