@@ -302,7 +302,7 @@ GameObject.PhysicsUpdate = function(){
 		//		return total;
 			}
 			
-		}, (1/(60 * 60)) * 1000);
+		}, (1/(128)) * 1000);
 }
 
 	
