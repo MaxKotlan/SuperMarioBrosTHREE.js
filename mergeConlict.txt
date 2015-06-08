@@ -1,2 +1,2 @@
 This will be a conflict
-My name is max, and I like stuff.
+My name is joe, and I like things.
