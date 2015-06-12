@@ -57,3 +57,21 @@ GameObject.CreatePhysicsGeometry = function(parameters){
 	
 	return geometry;
 }
+
+/*Creates an entitiy*/
+GameObject.AddGlobalEntitiy = function(entityParameters){
+	entity = {}; entity.position = {};
+	
+	entityParameters = entityParameters !== undefined ? entityParameters : {}; 
+	entityParameters.position = entityParameters.position !== undefined ? entityParameters : {};  
+	
+	entity.name  =        entityParameters.name         !== undefined ? entityParameters.name  : "Undefined";
+	entity.speed =        entityParameters.speed 		!== undefined ? entityParameters.speed : 	0;
+	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity : 0;
+	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : 0;
+	entity.position.x =   entityParameters.position.x   !== undefined ? entityParameters.position.x : 0;
+	entity.position.y =   entityParameters.position.y   !== undefined ? entityParameters.position.y : 0;
+	entity.position.z =   entityParameters.position.z   !== undefined ? entityParameters.position.z : 0;
+	
+	GameObject.PhysicsEntities.push(entityParameters);
+}

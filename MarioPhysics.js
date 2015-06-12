@@ -1,8 +1,15 @@
 /*Physics Engine Based on http://s276.photobucket.com/user/jdaster64/media/smb_playerphysics.png.html*/
 
+/*Function Initiates Physics*/
+GameObject.InitPhysics = function(){
+	GameObject.PhysicsRefreshRate = 1/60;
+	GameObject.PhysicsEntities = [];
+	GameObject.AddGlobalEntitiy();
+	GameObject.PhysicsUpdate();
+}
+
 /*Loop That Calcualtes Game Physics*/
 GameObject.PhysicsUpdate = function(){
-   GameObject.PhysicsRefreshRate = 1/60;
 	setTimeout(function(){
 	   GameObject.CalculatePhysicsFrame();
 	   window.requestAnimationFrame(GameObject.PhysicsUpdate);
@@ -11,7 +18,15 @@ GameObject.PhysicsUpdate = function(){
 
 /*Used to Calcualte the position of all objects*/
 GameObject.CalculatePhysicsFrame = function(){
-   
+	for (var i = 0; i < GameObject.PhysicsEntities.length; i++){
+		CalculateObjectPhysics(GameObject.PhysicsEntities[i]);
+	}
+	/*Function*/
+	function CalculateObjectPhysics(object){
+		
+	}
 }
+
+
 
 

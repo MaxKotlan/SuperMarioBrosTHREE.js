@@ -287,7 +287,7 @@
 			function init(){
 				initTHREEjs();
 				generateLevelObjects();
-				GameObject.PhysicsUpdate();
+				GameObject.InitPhysics();
 				animate();
 			}
 			/*Initates three.js objects*/
@@ -343,8 +343,8 @@
 				window.addEventListener( 'mousedown', onMouseDown, true  );
 				window.addEventListener( 'resize', onWindowResize, false );
 				document.addEventListener('pointerlockchange', changeCallback, false);
-        document.addEventListener('mozpointerlockchange', changeCallback, false);
-        document.addEventListener('webkitpointerlockchange', changeCallback, false);
+				document.addEventListener('mozpointerlockchange', changeCallback, false);
+				document.addEventListener('webkitpointerlockchange', changeCallback, false);
 				document.addEventListener("mousemove", this.moveCallback, false);
 			}
 			
