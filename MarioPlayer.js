@@ -46,7 +46,7 @@ GameObject.Player = function (starting_pos){
 	starting_pos.y -= 0.5;
 	starting_pos.z = -Math.abs(starting_pos.z);
 		
-	platform_top = new THREE.MeshLambertMaterial({map: GameObject.MarioTextureMap, color: 0xABABAB, alphaTest: 0.5});
+	platform_top = new THREE.MeshLambertMaterial({map: GameObject.MarioTextureMap, color: 0xABABAB, alphaTest: 0.5, side: THREE.DoubleSide});
 	//var platform_top = new THREE.MeshLambertMaterial({color: 0x00FF00, wireframe: true});
 	
 	var uniforms = { texture:  { type: "t", value: GameObject.MarioTextureMap } };
@@ -62,6 +62,7 @@ GameObject.Player = function (starting_pos){
 	mesh_player.renderDepth = 1;
 	mesh_player.castShadow = true;
 	mesh_player.receiveShadow = true;
+	mesh_player.customDepthMaterial = new THREE.ShaderMaterial( { uniforms: uniforms, vertexShader: vertexShader, fragmentShader: fragmentShader } );
 	
 	player.mesh = mesh_player;
 	player.updateTexture = function(textureID, direction){

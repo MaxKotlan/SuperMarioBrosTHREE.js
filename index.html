@@ -224,6 +224,7 @@
 				if ( pixel.a < 0.5 ) discard;
 
 				gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
+			//	gl_FragColor = vec4( (texel.xyz * vec3(1.2,1.2,1.2)), pixel.w );
 
 			}
 		</script>
@@ -427,10 +428,10 @@
 				console.log(player1.mesh);
 				GameObject.AddGlobalEntitiy({
 				   name:"Mario",
-				   position: new THREE.Vector3(3,3,-1),
+				   position: new THREE.Vector3(3,4,-1),
 				   mesh: player1.mesh
 				})
-				player1.updateTexture(0, "forward");
+				player1.updateTexture(4, "forward");
 			//	player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
 				
 				/*Creates Goomba*/
