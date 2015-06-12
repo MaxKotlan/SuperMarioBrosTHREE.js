@@ -76,9 +76,13 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.position =     entityParameters.position     !== undefined ? entityParameters.position     : new THREE.Vector3(0,0,0);
 	
 	entity.mesh.position.copy(entity.position);
+	entity.mesh.position.y -= 1;
+	entity.mesh.position.x -= 1;
 	console.log(entity);
 	entity.boundingbox.position.copy(entity.position);
-	scene.add(entity.mesh);
+	entity.boundingbox.position.y -= 0.5;
+	entity.boundingbox.position.x -= 0.5;
+	scene.add(entity.mesh, entity.boundingbox);
 	
 	GameObject.PhysicsEntities.push(entity);
 }
