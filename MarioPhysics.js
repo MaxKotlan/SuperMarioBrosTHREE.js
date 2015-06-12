@@ -53,10 +53,10 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    	   faceCenter   = new THREE.Vector3(0,0,0);
    	   faceCenter.copy(entity.position);
    	   
-   	   faceCenterIndex[0] = new THREE.Vector3( 0.5, 0  , 0);
-   	   faceCenterIndex[1] = new THREE.Vector3(-0.5, 0  , 0);
-   	   faceCenterIndex[2] = new THREE.Vector3( 0  , 0.5, 0);
-   	   faceCenterIndex[3] = new THREE.Vector3( 0  ,-0.5, 0);
+   	   faceCenterIndex[0] = new THREE.Vector3( 0, 0  , 0);
+   	   faceCenterIndex[1] = new THREE.Vector3(-1, 0  , 0);
+   	   faceCenterIndex[2] = new THREE.Vector3( 0  , 0, 0);
+   	   faceCenterIndex[3] = new THREE.Vector3( 0  ,-1, 0);
    	   
    	   rayIndex[0] = new THREE.Vector3( 1, 0, 0 );
    	   rayIndex[1] = new THREE.Vector3(-1, 0, 0 );
