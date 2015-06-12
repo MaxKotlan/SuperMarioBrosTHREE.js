@@ -4,7 +4,6 @@
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60;
 	GameObject.PhysicsEntities = [];
-	GameObject.AddGlobalEntitiy({position.x: });
 	GameObject.PhysicsUpdate();
 }
 

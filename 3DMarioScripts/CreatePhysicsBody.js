@@ -11,7 +11,7 @@ GameObject.CreatePhysicsGeometry = function(parameters){
 		position = parameters.position;
 	}
 	
-	if (parameters.scale == undefined){ 
+	if (parameters.scale == undefined){
 		scale = new THREE.Vector2(1,1);
 	}else{
 		scale = parameters.scale;
@@ -62,24 +62,22 @@ GameObject.CreatePhysicsGeometry = function(parameters){
 GameObject.AddGlobalEntitiy = function(entityParameters){
 	var entity, defaultmesh;
 	
-	entity = {}; entity.position = {};
-	defaultmesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( {color: 0x00ff00} ));
+	entity = {};
+	defaultmesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( {color: 0x00ff00, wireframe : true} ));
 	
-	entityParameters = entityParameters !== undefined ? entityParameters : {}; 
-	entityParameters.position = entityParameters.position !== undefined ? entityParameters : {};  
+	entityParameters = entityParameters !== undefined ? entityParameters : {};
 	
 	entity.name  =        entityParameters.name         !== undefined ? entityParameters.name         : "Undefined";
 	entity.mesh  =        entityParameters.mesh         !== undefined ? entityParameters.mesh         : defaultmesh;
+	entity.boundingbox =  entityParameters.boundingbox  !== undefined ? entityParameters.boundingbox  : defaultmesh;
 	entity.speed =        entityParameters.speed        !== undefined ? entityParameters.speed        : 0;
 	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : 0;
 	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : 0;
-	entity.position.x =   entityParameters.position.x   !== undefined ? entityParameters.position.x   : 0;
-	entity.position.y =   entityParameters.position.y   !== undefined ? entityParameters.position.y   : 0;
-	entity.position.z =   entityParameters.position.z   !== undefined ? entityParameters.position.z   : 0;
+	entity.position =     entityParameters.position     !== undefined ? entityParameters.position     : new THREE.Vector3(0,0,0);
 	
-	entity.mesh.position.x = entity.position.x;
-	entity.mesh.position.y = entity.position.y;
-	entity.mesh.position.z = entity.position.z;
+	entity.mesh.position.copy(entity.position);
+	console.log(entity);
+	entity.boundingbox.position.copy(entity.position);
 	scene.add(entity.mesh);
 	
 	GameObject.PhysicsEntities.push(entity);

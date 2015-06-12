@@ -286,8 +286,8 @@
 			/*Inital functuions after done loading map*/
 			function init(){
 				initTHREEjs();
-				generateLevelObjects();
 				GameObject.InitPhysics();
+				generateLevelObjects();
 				animate();
 			}
 			/*Initates three.js objects*/
@@ -423,8 +423,12 @@
 	//			scene.add( AmbientLight );
 				
 				/*Creates Player(s)*/
-				player1 = new GameObject.Player(new THREE.Vector3(3, 9.5, 1));
-				player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
+				GameObject.AddGlobalEntitiy({
+				   name:"Mario",
+				   position: new THREE.Vector3(3,9.5,1),
+				   mesh: new GameObject.Player(new THREE.Vector3(3, 9.5, 1))
+				});
+			//	player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
 				
 				/*Creates Goomba*/
 				GameObject.CreateGoomba();

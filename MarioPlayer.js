@@ -89,7 +89,7 @@ GameObject.Player = function (starting_pos){
 		//	console.log(player1);
 	}
         
-	return player;
+	return mesh_player;
 }
 
 
