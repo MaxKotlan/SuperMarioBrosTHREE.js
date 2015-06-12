@@ -47,25 +47,58 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	var entity, defaultmesh;
 	
 	entity = {};
-	defaultmesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( {color: 0x00ff00, wireframe : true} ));
+	defaultmesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { wireframe : true } ));
 	
 	entityParameters = entityParameters !== undefined ? entityParameters : {};
 	
 	entity.name  =        entityParameters.name         !== undefined ? entityParameters.name         : "Undefined";
+	entity.playable =     entityParameters.playable     !== undefined ? entityParameters.playable     : false;
 	entity.mesh  =        entityParameters.mesh         !== undefined ? entityParameters.mesh         : defaultmesh;
 	entity.boundingbox =  entityParameters.boundingbox  !== undefined ? entityParameters.boundingbox  : defaultmesh;
-	entity.speed =        entityParameters.speed        !== undefined ? entityParameters.speed        : new THREE.Vector2(0,0);
-	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : new THREE.Vector2(0,0);
-	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : new THREE.Vector2(0,0);
+	entity.speed =        entityParameters.speed        !== undefined ? entityParameters.speed        : new THREE.Vector3(0,0,0);
+	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : new THREE.Vector3(0,0,0);
+	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : new THREE.Vector3(0,0,0);
 	entity.position =     entityParameters.position     !== undefined ? entityParameters.position     : new THREE.Vector3(0,0,0);
+	
+	entity.boundingbox.material.color = entity.playable == false ? new THREE.Color(0xff0000) : new THREE.Color(0x00ff00);
 	
 	entity.mesh.position.copy(entity.position);
 	entity.mesh.position.y -= 1;
 	entity.mesh.position.x -= 1;
-	console.log(entity);
+	
 	entity.boundingbox.position.copy(entity.position);
 	entity.boundingbox.position.y -= 0.5;
 	entity.boundingbox.position.x -= 0.5;
+	
+	entity.boundingbox.geometry.computeFaceNormals();
+	entity.boundingbox.geometry.computeMorphNormals();
+	entity.boundingbox.geometry.computeVertexNormals();
+	//entity.mesh.geometry.computeBoundingBox();
+	
+/*	for (var i = 0; i < entity.boundingbox.geometry.faces.length; i++){
+	   var geometry = new THREE.SphereGeometry( 1/32, 32, 32 );
+      var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+      var sphere1 = new THREE.Mesh( geometry, material );
+      var sphere2 = new THREE.Mesh( geometry, material );
+      var sphere3 = new THREE.Mesh( geometry, material );
+	   
+      sphere1.position.copy(entity.boundingbox.geometry.vertices[entity.boundingbox.geometry.faces[i].a]);
+      sphere2.position.copy(entity.boundingbox.geometry.vertices[entity.boundingbox.geometry.faces[i].b]);
+      sphere3.position.copy(entity.boundingbox.geometry.vertices[entity.boundingbox.geometry.faces[i].c]);
+      
+      sphere1.position.add(entity.boundingbox.position);
+      sphere2.position.add(entity.boundingbox.position);
+      sphere3.position.add(entity.boundingbox.position);
+      
+      sphere1.position.add(entity.boundingbox.geometry.faces[i].normal;
+      sphere2.position.add(entity.boundingbox.geometry.faces[i].normal;
+      sphere3.position.add(entity.boundingbox.geometry.faces[i].normal;
+      
+      scene.add(sphere1, sphere2, sphere3);
+	}*/
+	
+	console.log(entity.boundingbox);
+	
 	scene.add(entity.mesh, entity.boundingbox);
 	
 	GameObject.PhysicsEntities.push(entity);
