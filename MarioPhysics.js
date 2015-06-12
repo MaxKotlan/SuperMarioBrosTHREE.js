@@ -4,7 +4,7 @@
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60;
 	GameObject.PhysicsEntities = [];
-	GameObject.AddGlobalEntitiy();
+	GameObject.AddGlobalEntitiy({position.x: });
 	GameObject.PhysicsUpdate();
 }
 
@@ -22,7 +22,7 @@ GameObject.CalculatePhysicsFrame = function(){
 		CalculateObjectPhysics(GameObject.PhysicsEntities[i]);
 	}
 	/*Function*/
-	function CalculateObjectPhysics(object){
+	function CalculateObjectPhysics(entity){
 		
 	}
 }
