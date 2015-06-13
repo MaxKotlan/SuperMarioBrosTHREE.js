@@ -75,8 +75,6 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox.geometry.computeMorphNormals();
 	entity.boundingbox.geometry.computeVertexNormals();
 	
-	entity.mesh.rotation.y = Math.PI / 2;
-	
 	console.log(entity.boundingbox);
 	
 	scene.add(entity.mesh, entity.boundingbox);
