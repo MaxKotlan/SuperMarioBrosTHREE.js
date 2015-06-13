@@ -431,13 +431,23 @@
 				   position: new THREE.Vector3(3,4,-1),
 				   mesh: player1.mesh,
 				   playable: false,
-				   velocity: new THREE.Vector3(0.01,0,0)
+				   velocity: new THREE.Vector3(0.01,0,0),
+				   acceleration: new THREE.Vector3(0,-0.001,0)
 				})
+				
 				player1.updateTexture(4, "forward");
 			//	player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
 				
 				/*Creates Goomba*/
-				GameObject.CreateGoomba();
+				GameObject.AddGlobalEntitiy({
+				   name:"Goomba",
+				   position: new THREE.Vector3(6,3.5,-1),
+				   mesh: GameObject.CreateGoomba(),
+				   playable: false,
+				   velocity: new THREE.Vector3(0.01,0,0),
+				   acceleration: new THREE.Vector3(0,-0.001,0)
+				})
+				
 				
 		//		GameObject.Developer.showGrids();
 				

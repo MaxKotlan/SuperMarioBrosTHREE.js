@@ -26,10 +26,25 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
          break;
       case false:
             entity.position.add(entity.velocity.add(entity.acceleration));
-            CheckifTouch(entity);
+            var intersection = CheckifTouch(entity);
+			if (intersection.right  === true ){ xaxis() ;}
+			if (intersection.left   === true ){ xaxis() ;}
+			if (intersection.top	=== true ){ yaxis() ;}
+			if (intersection.bottom === true ){ yaxis() ;}
             UpdateMeshAndBoundingBox(entity);
          break;
    }
+   function xaxis(){
+	   entity.velocity.x = -1*(entity.velocity.x);
+	   entity.position.x += -1*(entity.velocity.x);
+	   console.log("hit something...");
+   }
+   
+   function yaxis(){
+		entity.velocity.y = 0;
+		entity.acceleration.y = 0;
+   }
+   
    /*Updates the position of the boundingbox, and the mesh*/
    function UpdateMeshAndBoundingBox(entity){
       entity.mesh.position.copy(entity.position);
@@ -43,6 +58,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    
    /*Checks for collisions with all other entities and static geometry*/
    function CheckifTouch(entity){
+	var intersection = {top: false, bottom: false, left: false, right: false};
    	for (var i = 0; i < 4; i++){
    	   var raycaster = new THREE.Raycaster();
    	   
@@ -58,10 +74,10 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    	   faceCenterIndex[2] = new THREE.Vector3( 0  , 0, 0);
    	   faceCenterIndex[3] = new THREE.Vector3( 0  ,-1, 0);
    	   
-   	   rayIndex[0] = new THREE.Vector3( 1, 0, 0 );
-   	   rayIndex[1] = new THREE.Vector3(-1, 0, 0 );
-   	   rayIndex[2] = new THREE.Vector3( 1, 1, 0 );
-   	   rayIndex[3] = new THREE.Vector3( 1,-1, 0 );
+   	   rayIndex[0] = new THREE.Vector3( 0.1, 0, 0 );
+   	   rayIndex[1] = new THREE.Vector3(-0.1, 0, 0 );
+   	   rayIndex[2] = new THREE.Vector3( 0.1, 0.1, 0 );
+   	   rayIndex[3] = new THREE.Vector3( 0.1,-0.1, 0 );
          
          faceCenter.add(faceCenterIndex[i]);
          
@@ -69,22 +85,42 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
          raycaster.far = 0.1;
          
        //  console.log(raycasterVert);
+		 if (GameObject.WorldGeom == undefined){
+			  break;
+		 }
+	   
+		 GameObject.ArrayOfPhysicsObjects[0] = GameObject.WorldGeom.STATIC;
          
-         if (GameObject.WorldGeom == undefined){
-            break;
-         }
-         
-         var objects = [];
-			objects[0] = GameObject.WorldGeom.STATIC;
-         
-         var intersects = raycaster.intersectObjects(objects);
+         var intersects = raycaster.intersectObjects(GameObject.ArrayOfPhysicsObjects);
 
          if (intersects.length > 0){
-				entity.velocity.x = -1*(entity.velocity.x);
+			switch(i){
+				case 0:
+					intersection.right = true;
+					break;
+				case 1:
+					intersection.left = true;
+					break;
+				case 2:
+					intersection.top = true;
+					break;
+				case 3:
+					intersection.bottom = true;
+					break;
 			}
+		}
    	}
+	return intersection;
    }
 }
 
+GameObject.UpdateEntities = function(){
+	GameObject.ArrayOfPhysicsObjects = [];
+	GameObject.ArrayOfPhysicsObjects[0] = null;
+	for (var i = 0; i < GameObject.PhysicsEntities.length; i++){
+		GameObject.ArrayOfPhysicsObjects.push(GameObject.PhysicsEntities[i].boundingbox);
+		console.log(GameObject.ArrayOfPhysicsObjects);
+	}
+}
 
 

@@ -9,9 +9,8 @@ GameObject.CreateGoomba = function(){
 		GameObject.UpdateSpriteFrame(geometry, 0);
 		var mesh = new THREE.Mesh(geometry,material);
 		mesh.position.copy(new THREE.Vector3(5,2,-1));
-		GameObject.meshTempor =  mesh;
 		goomba.mesh = mesh;
-		scene.add(GameObject.meshTempor);
+		return goomba.mesh;
 }
 
 GameObject.GetGoombaMaterial = function(materialID, u, v){

@@ -608,7 +608,7 @@
 	//			var bush = GameObject.Bush(new THREE.Vector3(12,2.5,-2));
 				GameObject.WorldGeom.DYNAMIC.position.z = -0.5;
 				console.log(GameObject.WorldGeom.FORAGE);
-				
+				GameObject.UpdateEntities();
 				scene.add(GameObject.WorldGeom.STATIC, GameObject.WorldGeom.FORAGE,  GameObject.WorldGeom.DYNAMIC);
 			}
 
