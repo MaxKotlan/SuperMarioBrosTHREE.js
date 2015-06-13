@@ -3,12 +3,22 @@ GameObject.CreateGoomba = function(){
 		var geometry = GameObject.CreatePhysicsGeometry();
 	console.log(geometry);
 	//	var material = new THREE.MeshBasicMaterial({color:0xFF0000, wireframe:true});
-		var material = new THREE.MeshBasicMaterial({map: GameObject.GoombaTextureMap, alphaTest: 0.5});
+		var material = new THREE.MeshLambertMaterial({map: GameObject.GoombaTextureMap,  color: 0xFFFFFF, alphaTest: 0.5, side: THREE.DoubleSide});
 		var goomba = {};
 		
 		GameObject.UpdateSpriteFrame(geometry, 0);
 		var mesh = new THREE.Mesh(geometry,material);
 		mesh.position.copy(new THREE.Vector3(5,2,-1));
+		
+		var uniforms = { texture:  { type: "t", value: GameObject.GoombaTextureMap, } };
+		var vertexShader = document.getElementById( 'marioVertexShader' ).textContent;
+		var fragmentShader = document.getElementById( 'marioFragmentShader' ).textContent;
+		
+		mesh.renderDepth = 1;
+		mesh.castShadow = true;
+		mesh.receiveShadow = true;
+		mesh.customDepthMaterial = new THREE.ShaderMaterial( { uniforms: uniforms, vertexShader: vertexShader, fragmentShader: fragmentShader } );
+		
 		goomba.mesh = mesh;
 		return goomba.mesh;
 }
@@ -66,7 +76,7 @@ GameObject.GoombaUpdateLoop = function(){
 	setTimeout(function(){
 		GameObject.upad += 1;
 		if (GameObject.upad > 1){GameObject.upad = 0;}
-		GameObject.UpdateSpriteFrame(GameObject.meshTempor.geometry, GameObject.upad);
+		GameObject.UpdateSpriteFrame(GameObject.PhysicsEntities[1].mesh.geometry, GameObject.upad);
 		window.requestAnimationFrame(GameObject.GoombaUpdateLoop);
 	}, (175));
 }

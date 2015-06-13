@@ -55,6 +55,7 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.playable =     entityParameters.playable     !== undefined ? entityParameters.playable     : false;
 	entity.mesh  =        entityParameters.mesh         !== undefined ? entityParameters.mesh         : defaultmesh;
 	entity.boundingbox =  entityParameters.boundingbox  !== undefined ? entityParameters.boundingbox  : defaultmesh;
+	entity.force =        entityParameters.force        !== undefined ? entityParameters.force        : new THREE.Vector3(0,0,0);
 	entity.speed =        entityParameters.speed        !== undefined ? entityParameters.speed        : new THREE.Vector3(0,0,0);
 	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : new THREE.Vector3(0,0,0);
 	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : new THREE.Vector3(0,0,0);
@@ -73,29 +74,8 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox.geometry.computeFaceNormals();
 	entity.boundingbox.geometry.computeMorphNormals();
 	entity.boundingbox.geometry.computeVertexNormals();
-	//entity.mesh.geometry.computeBoundingBox();
 	
-/*	for (var i = 0; i < entity.boundingbox.geometry.faces.length; i++){
-	   var geometry = new THREE.SphereGeometry( 1/32, 32, 32 );
-      var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-      var sphere1 = new THREE.Mesh( geometry, material );
-      var sphere2 = new THREE.Mesh( geometry, material );
-      var sphere3 = new THREE.Mesh( geometry, material );
-	   
-      sphere1.position.copy(entity.boundingbox.geometry.vertices[entity.boundingbox.geometry.faces[i].a]);
-      sphere2.position.copy(entity.boundingbox.geometry.vertices[entity.boundingbox.geometry.faces[i].b]);
-      sphere3.position.copy(entity.boundingbox.geometry.vertices[entity.boundingbox.geometry.faces[i].c]);
-      
-      sphere1.position.add(entity.boundingbox.position);
-      sphere2.position.add(entity.boundingbox.position);
-      sphere3.position.add(entity.boundingbox.position);
-      
-      sphere1.position.add(entity.boundingbox.geometry.faces[i].normal;
-      sphere2.position.add(entity.boundingbox.geometry.faces[i].normal;
-      sphere3.position.add(entity.boundingbox.geometry.faces[i].normal;
-      
-      scene.add(sphere1, sphere2, sphere3);
-	}*/
+	entity.mesh.rotation.y = Math.PI / 2;
 	
 	console.log(entity.boundingbox);
 	

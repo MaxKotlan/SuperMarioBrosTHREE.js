@@ -26,7 +26,8 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
          break;
       case false:
             entity.position.add(entity.velocity.add(entity.acceleration));
-            var intersection = CheckifTouch(entity);
+            Calcualteforce(entity);
+			var intersection = CheckifTouch(entity);
 			if (intersection.right  === true ){ xaxis() ;}
 			if (intersection.left   === true ){ xaxis() ;}
 			if (intersection.top	=== true ){ yaxis() ;}
@@ -36,13 +37,18 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    }
    function xaxis(){
 	   entity.velocity.x = -1*(entity.velocity.x);
-	   entity.position.x += -1*(entity.velocity.x);
-	   console.log("hit something...");
+	   console.log(entity.name + " hit something...");
    }
    
    function yaxis(){
+	    entity.force.y = Math.abs(entity.force.y);
 		entity.velocity.y = 0;
 		entity.acceleration.y = 0;
+   }
+   
+   function Calcualteforce(entity){
+	    entity.force.y = -0.01;
+		entity.acceleration.copy(entity.force);
    }
    
    /*Updates the position of the boundingbox, and the mesh*/
