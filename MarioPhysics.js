@@ -21,7 +21,9 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    /*If the player is Human or NPC*/
    switch (entity.playable){
       case true:
-      //      console.log(entity.boundingbox);
+			entity.position.add(entity.velocity.add(entity.acceleration));
+			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
+			UpdateMeshAndBoundingBox(entity);
          break;
       case false:
             entity.position.add(entity.velocity.add(entity.acceleration));
@@ -49,7 +51,6 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 		if (collision.inside == true){
 			entity.position.set(entity.position.x-1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
 			entity.velocity.set(1*entity.velocity.x,-1*entity.velocity.y/2,0);
-			console.log(entity);
 		}
    }
    
@@ -57,6 +58,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	   var collision = {inside: false};
 	   
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
+	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 2)].air) == false){collision.inside = true;};
 	   
 	   return collision;
    }

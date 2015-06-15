@@ -428,11 +428,11 @@
 				console.log(player1.mesh);
 				GameObject.AddGlobalEntitiy({
 				   name:"Mario",
-				   position: new THREE.Vector3(3,4,-1),
+				   position: new THREE.Vector3(3,10,-1),
 				   mesh: player1.mesh,
-				   playable: false,
+				   playable: true,
 				   velocity: new THREE.Vector3(0.01,0,0),
-				   acceleration: new THREE.Vector3(0,-0.001,0)
+				   acceleration: new THREE.Vector3(0,-1/64,0)
 				})
 				
 				player1.updateTexture(4, "forward");
@@ -445,8 +445,8 @@
 					   position: new THREE.Vector3(Math.random() * 	10,3.5,-1),
 					   mesh: GameObject.CreateGoomba(),
 					   playable: false,
-					   velocity: new THREE.Vector3(0.04,0,0),
-					   acceleration: new THREE.Vector3(0,0,0)
+					   velocity: new THREE.Vector3(1/16,0,0),
+					   acceleration: new THREE.Vector3(0,-1/64,0)
 					})
 				}
 				
