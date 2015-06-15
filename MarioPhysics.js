@@ -2,7 +2,7 @@
 
 /*Function Initiates Physics*/
 GameObject.InitPhysics = function(){
-	GameObject.PhysicsRefreshRate = 1/60;
+	GameObject.PhysicsRefreshRate = 1*60*60;
 	GameObject.PhysicsEntities = [];
 	GameObject.PhysicsUpdate();
 }
@@ -26,29 +26,22 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
          break;
       case false:
             entity.position.add(entity.velocity.add(entity.acceleration));
-            Calcualteforce(entity);
-			var intersection = CheckifTouch(entity);
-			if (intersection.right  === true ){ xaxis() ;}
-			if (intersection.left   === true ){ xaxis() ;}
-			if (intersection.top	=== true ){ yaxis() ;}
-			if (intersection.bottom === true ){ yaxis() ;}
-            UpdateMeshAndBoundingBox(entity);
+            updateAABB(entity);
+			UpdateMeshAndBoundingBox(entity);
          break;
    }
-   function xaxis(){
-	   entity.velocity.x = -1*(entity.velocity.x);
-	   console.log(entity.name + " hit something...");
+   
+   function updateAABB(entity){
+	   
    }
    
-   function yaxis(){
-	    entity.force.y = Math.abs(entity.force.y);
-		entity.velocity.y = 0;
-		entity.acceleration.y = 0;
-   }
-   
-   function Calcualteforce(entity){
-	    entity.force.y = -0.01;
-		entity.acceleration.copy(entity.force);
+   function AABBvsAABB(a,b){
+	  // Exit with no intersection if found separated along an axis
+	//  if(a.max.x < b.min.x or a.min.x > b.max.x) {return false;}
+	 // if(a.max.y < b.min.y or a.min.y > b.max.y) {return false;}
+	 
+	  // No separating axis found, therefor there is at least one overlapping axis
+	  return true;
    }
    
    /*Updates the position of the boundingbox, and the mesh*/

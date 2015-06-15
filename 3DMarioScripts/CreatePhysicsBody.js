@@ -63,6 +63,8 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	
 	entity.boundingbox.material.color = entity.playable == false ? new THREE.Color(0xff0000) : new THREE.Color(0x00ff00);
 	
+	entity.AABB = {min: new THREE.Vector2(entity.position.x-1,entity.position.y-1),max:new THREE.Vector2(entity.position.x,entity.position.y)};
+	
 	entity.mesh.position.copy(entity.position);
 	entity.mesh.position.y -= 1;
 	entity.mesh.position.x -= 1;
@@ -74,10 +76,27 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox.geometry.computeFaceNormals();
 	entity.boundingbox.geometry.computeMorphNormals();
 	entity.boundingbox.geometry.computeVertexNormals();
+	entity.mesh.geometry.computeBoundingBox();
 	
-	console.log(entity.boundingbox);
+		   console.log("chickenbiscuits");
+	   console.log(entity.position);
+	   
+	   var material = new THREE.MeshBasicMaterial({
+			color: 0x0000ff
+		});
+
+		var radius = 1/32;
+		var segments = 32;
+
+		var circleGeometry = new THREE.CircleGeometry( radius, segments );				
+		var circle = new THREE.Mesh( circleGeometry, material );
+		circle.position.copy(entity.position);
+		var circle2 = new THREE.Mesh( circleGeometry, material );
+		circle2.position.copy(entity.position.sub(new THREE.Vector3(1,1,0)));
 	
-	scene.add(entity.mesh, entity.boundingbox);
+	console.log(entity.mesh);
+	
+	scene.add(entity.mesh, entity.boundingbox, circle);
 	
 	GameObject.PhysicsEntities.push(entity);
 }
