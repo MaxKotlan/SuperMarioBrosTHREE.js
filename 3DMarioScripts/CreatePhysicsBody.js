@@ -77,26 +77,10 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox.geometry.computeMorphNormals();
 	entity.boundingbox.geometry.computeVertexNormals();
 	entity.mesh.geometry.computeBoundingBox();
-	
-		   console.log("chickenbiscuits");
-	   console.log(entity.position);
-	   
-	   var material = new THREE.MeshBasicMaterial({
-			color: 0x0000ff
-		});
-
-		var radius = 1/32;
-		var segments = 32;
-
-		var circleGeometry = new THREE.CircleGeometry( radius, segments );				
-		var circle = new THREE.Mesh( circleGeometry, material );
-		circle.position.copy(entity.position);
-		var circle2 = new THREE.Mesh( circleGeometry, material );
-		circle2.position.copy(entity.position.sub(new THREE.Vector3(1,1,0)));
-	
+		
 	console.log(entity.mesh);
 	
-	scene.add(entity.mesh, entity.boundingbox, circle);
+	scene.add(entity.mesh, entity.boundingbox);
 	
 	GameObject.PhysicsEntities.push(entity);
 }

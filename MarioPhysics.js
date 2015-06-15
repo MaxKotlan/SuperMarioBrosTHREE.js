@@ -2,7 +2,7 @@
 
 /*Function Initiates Physics*/
 GameObject.InitPhysics = function(){
-	GameObject.PhysicsRefreshRate = 1*60*60;
+	GameObject.PhysicsRefreshRate = 1/60;
 	GameObject.PhysicsEntities = [];
 	GameObject.PhysicsUpdate();
 }
@@ -26,7 +26,9 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
          break;
       case false:
             entity.position.add(entity.velocity.add(entity.acceleration));
-            updateAABB(entity);
+          //  updateAABB(entity);
+		//	AABBvsAABB(entity.AABB, entity.AABB);
+			console.log(checkBlockUsingVoxelMap(entity));
 			UpdateMeshAndBoundingBox(entity);
          break;
    }
@@ -42,6 +44,18 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	 
 	  // No separating axis found, therefor there is at least one overlapping axis
 	  return true;
+   }
+   
+   function checkBlockUsingVoxelMap(entity){
+	   console.log(getblock(Math.ceil(entity.position.x)+1, Math.floor(entity.position.y)  , 1));
+	   
+	   if ((map[getblock(Math.ceil(entity.position.x), Math.floor(entity.position.y), 1)].air) == false){return "current";};
+	   
+	   if ((map[getblock(Math.ceil(entity.position.x)+1, Math.floor(entity.position.y)  , 1)].air) == false){return "right";};
+	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)  , 1)].air) == false){return "left";};
+	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)+1, 1)].air) == false){return "up";};
+	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)-1, 1)].air) == false){return "down";};
+	   return "None";
    }
    
    /*Updates the position of the boundingbox, and the mesh*/
