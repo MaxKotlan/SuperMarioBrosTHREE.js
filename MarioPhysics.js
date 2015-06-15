@@ -3,6 +3,7 @@
 /*Function Initiates Physics*/
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60;
+	GameObject.PhysicsGravity = -9.931;
 	GameObject.PhysicsEntities = [];
 }
 
@@ -21,7 +22,8 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    /*If the player is Human or NPC*/
    switch (entity.playable){
       case true:
-			entity.position.add(entity.velocity.add(entity.acceleration));
+			entity.force.y += GameObject.PhysicsGravity;
+			console.log(entity.position.add(entity.velocity.add(entity.acceleration.copy(entity.force.divideScalar(entity.mass)))));
 			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
 			UpdateMeshAndBoundingBox(entity);
          break;

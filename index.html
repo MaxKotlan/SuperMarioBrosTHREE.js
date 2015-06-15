@@ -424,7 +424,7 @@
 	//			scene.add( AmbientLight );
 				
 				/*Creates Player(s)*/
-			   player1 = new GameObject.Player();
+				player1 = new GameObject.Player();
 				console.log(player1.mesh);
 				GameObject.AddGlobalEntitiy({
 				   name:"Mario",
@@ -432,7 +432,7 @@
 				   mesh: player1.mesh,
 				   playable: true,
 				   velocity: new THREE.Vector3(0.01,0,0),
-				   acceleration: new THREE.Vector3(0,-1/64,0)
+				   acceleration: new THREE.Vector3(0,0,0)
 				})
 				
 				player1.updateTexture(4, "forward");
@@ -446,7 +446,7 @@
 					   mesh: GameObject.CreateGoomba(),
 					   playable: false,
 					   velocity: new THREE.Vector3(1/16,0,0),
-					   acceleration: new THREE.Vector3(0,-1/64,0)
+					   acceleration: new THREE.Vector3(0,0,0)
 					})
 				}
 				
