@@ -4,7 +4,6 @@
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60;
 	GameObject.PhysicsEntities = [];
-	GameObject.PhysicsUpdate();
 }
 
 /*Loop That Calcualtes Game Physics*/
@@ -28,7 +27,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
             entity.position.add(entity.velocity.add(entity.acceleration));
           //  updateAABB(entity);
 		//	AABBvsAABB(entity.AABB, entity.AABB);
-			console.log(checkBlockUsingVoxelMap(entity));
+			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
 			UpdateMeshAndBoundingBox(entity);
          break;
    }
@@ -46,16 +45,20 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	  return true;
    }
    
+   function impulseResolution(collision, entity){
+		if (collision.inside == true){
+			entity.position.set(entity.position.x-1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
+			entity.velocity.set(1*entity.velocity.x,-1*entity.velocity.y/2,0);
+			console.log(entity);
+		}
+   }
+   
    function checkBlockUsingVoxelMap(entity){
-	   console.log(getblock(Math.ceil(entity.position.x)+1, Math.floor(entity.position.y)  , 1));
+	   var collision = {inside: false};
 	   
-	   if ((map[getblock(Math.ceil(entity.position.x), Math.floor(entity.position.y), 1)].air) == false){return "current";};
+	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
 	   
-	   if ((map[getblock(Math.ceil(entity.position.x)+1, Math.floor(entity.position.y)  , 1)].air) == false){return "right";};
-	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)  , 1)].air) == false){return "left";};
-	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)+1, 1)].air) == false){return "up";};
-	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)-1, 1)].air) == false){return "down";};
-	   return "None";
+	   return collision;
    }
    
    /*Updates the position of the boundingbox, and the mesh*/
