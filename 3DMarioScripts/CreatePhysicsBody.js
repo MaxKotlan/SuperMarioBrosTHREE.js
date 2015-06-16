@@ -57,6 +57,7 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox =  entityParameters.boundingbox  !== undefined ? entityParameters.boundingbox  : defaultmesh;
 	entity.force =        entityParameters.force        !== undefined ? entityParameters.force        : new THREE.Vector3(0,0,0);
 	entity.mass  =        entityParameters.mass         !== undefined ? entityParameters.mass         : 72.5748;
+	entity.restitution =  entityParameters.restitution  !== undefined ? entityParameters.restitution  : 999999;
 	entity.speed =        entityParameters.speed        !== undefined ? entityParameters.speed        : new THREE.Vector3(0,0,0);
 	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : new THREE.Vector3(0,0,0);
 	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : new THREE.Vector3(0,0,0);
