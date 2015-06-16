@@ -19,13 +19,21 @@ GameObject.PhysicsUpdate = function(){
 
 /*Used to Calcualte the position of an object*/
 GameObject.CalculatePhysicsFrameOfEntity = function(entity){
+	var force = new THREE.Vector2(0,0);
    /*If the player is Human or NPC*/
    switch (entity.playable){
       case true:
-			entity.acceleration.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
-			//entity.position.add(entity.velocity.add(entity.acceleration.copy(entity.force.divideScalar(entity.mass))));
-			entity.position.add(entity.velocity.add(entity.acceleration));
+			force.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
+			entity.force.y = force.y;
+			entity.force.y += keyboard.pressed("W") ?  -1*force.y+0.5 : 0;
+			entity.force.x += keyboard.pressed("D") ?  0.001 : 0;
+			entity.force.x += keyboard.pressed("A") ? -0.001 : 0;
+			entity.velocity.add(entity.acceleration.copy(entity.force.divideScalar(entity.mass)));
+			entity.velocity.x = entity.velocity.x >  entity.Maxspeed ?  entity.Maxspeed : entity.velocity.x;
+			entity.velocity.x = entity.velocity.x < -entity.Maxspeed ? -entity.Maxspeed : entity.velocity.x;
+			entity.position.add(entity.velocity);
 			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
+			console.log(entity.velocity.x);
 			UpdateMeshAndBoundingBox(entity);
 			
 			

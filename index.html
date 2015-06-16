@@ -439,7 +439,7 @@
 			//	player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
 				
 				/*Creates Goomba*/
-				for (var q = 0; q < 20; q++){
+				for (var q = 0; q < 0; q++){
 					GameObject.AddGlobalEntitiy({
 					   name:"Goomba",
 					   position: new THREE.Vector3(Math.random() * 	10, (Math.random() * 10) + 3,-1),
@@ -534,18 +534,18 @@
 					povControls.update(delta);
 					devControls.update();
 
-			//		camera3d.position.copy(player1.mesh.position);
+					camera3d.position.copy(GameObject.PhysicsEntities[0].position);
 					camera3d.position.y += 0.6;
-			//		if (player1.mesh.position.x > screenWidth/128) {
-			//			camera2d.position.x = player1.mesh.position.x;
-			//			camera3dScroll.position.x = player1.mesh.position.x;
-			//		}
+					if (GameObject.PhysicsEntities[0].position.x > screenWidth/128) {
+						camera2d.position.x = GameObject.PhysicsEntities[0].position.x;
+						camera3dScroll.position.x = GameObject.PhysicsEntities[0].position.x;
+					}
 				}
 				
 				/*Renders scene to canvas*/
 				function render () {
 					GameObject.WorldGeom.FORAGE.material.uniforms["time"].value +=1;
-					renderer.render(scene, cameraDEV);
+					renderer.render(scene, camera3dScroll);
 				};
 			}
 			
@@ -561,7 +561,7 @@
 				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 				
-				raycaster.setFromCamera( mouse, cameraDEV);
+				raycaster.setFromCamera( mouse, camera3dScroll);
 
 				var objects = [];
 				objects[0] = GameObject.WorldGeom.STATIC;
