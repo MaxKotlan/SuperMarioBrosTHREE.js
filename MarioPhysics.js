@@ -22,10 +22,22 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    /*If the player is Human or NPC*/
    switch (entity.playable){
       case true:
+			/*Gravity*/
 			entity.force.y += GameObject.PhysicsGravity;
-			console.log(entity.position.add(entity.velocity.add(entity.acceleration.copy(entity.force.divideScalar(entity.mass)))));
+			
+			/*Jump*/
+			if (keyboard.pressed("W")){entity.force.y += 40;}
+			
+			/*Move Left*/
+			if (keyboard.pressed("A")){entity.force.x -= 100;}
+			
+			/*Move Right*/
+			if (keyboard.pressed("A")){entity.force.x += 100;}
+			entity.position.add(entity.velocity.add(entity.acceleration.copy(entity.force.divideScalar(entity.mass))));
 			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
 			UpdateMeshAndBoundingBox(entity);
+			
+			console.log(entity);
          break;
       case false:
             entity.position.add(entity.velocity.add(entity.acceleration));
@@ -51,14 +63,14 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    
    function impulseResolution(collision, entity){
 		if (collision.inside == true){
+	//	   var bounciness = entity.restitution == 0 ? entity.velocity.y : entity.restitution;
 			entity.position.set(entity.position.x-1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
-			entity.velocity.set(1*entity.velocity.x,-1*entity.velocity.y/2,0);
+			entity.velocity.set(1*entity.velocity.x,-1*(entity.velocity.y/2),0);
 		}
    }
    
    function checkBlockUsingVoxelMap(entity){
 	   var collision = {inside: false};
-	   
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 2)].air) == false){collision.inside = true;};
 	   
