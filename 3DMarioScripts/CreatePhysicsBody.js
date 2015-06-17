@@ -57,14 +57,17 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox =  entityParameters.boundingbox  !== undefined ? entityParameters.boundingbox  : defaultmesh;
 	entity.force =        entityParameters.force        !== undefined ? entityParameters.force        : new THREE.Vector3(0,0,0);
 	entity.mass  =        entityParameters.mass         !== undefined ? entityParameters.mass         : 1;
-	entity.restitution =  entityParameters.restitution  !== undefined ? entityParameters.restitution  : 2;
+	entity.restitution =  entityParameters.restitution  !== undefined ? entityParameters.restitution  : 2; //0-1 MULTIPLYER, 1- INFINITE BOUNCE, 
 	entity.Maxspeed =     entityParameters.Maxspeed     !== undefined ? entityParameters.Maxspeed     : 0.1;
+	entity.physicsRound = entityParameters.physicsRound !== undefined ? entityParameters.physicsRound : true;
+	entity.RoundingNumber=entityParameters.RoundingNumber!== undefined ? entityParameters.RoundingNumber : 16;
 	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : new THREE.Vector3(0,0,0);
 	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : new THREE.Vector3(0,0,0);
 	entity.position =     entityParameters.position     !== undefined ? entityParameters.position     : new THREE.Vector3(0,0,0);
 
 	
 	entity.boundingbox.material.color = entity.playable == false ? new THREE.Color(0xff0000) : new THREE.Color(0x00ff00);
+//	entity.boundingbox.visible = false;
 	
 	entity.AABB = {min: new THREE.Vector2(entity.position.x-1,entity.position.y-1),max:new THREE.Vector2(entity.position.x,entity.position.y)};
 	
@@ -75,6 +78,7 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox.position.copy(entity.position);
 	entity.boundingbox.position.y -= 0.5;
 	entity.boundingbox.position.x -= 0.5;
+	entity.boundingbox.position.z = 3;
 	
 	entity.boundingbox.geometry.computeFaceNormals();
 	entity.boundingbox.geometry.computeMorphNormals();

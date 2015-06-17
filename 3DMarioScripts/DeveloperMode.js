@@ -1,9 +1,9 @@
 GameObject.Developer = {};
 
 GameObject.Developer.showGrids = function(map){
-	var step  =  1;
+	var step  =  1/16;
 	var geometry = new THREE.Geometry();
-	var material = new THREE.LineBasicMaterial({color: 0xAAAAAA});
+	var material = new THREE.LineBasicMaterial({color: 0x000});
 	
 	var y = 16;
 	var x = 212;
@@ -47,6 +47,7 @@ GameObject.Developer.showGrids = function(map){
 	console.log(geometry);
 	var line = new THREE.Line( geometry, material, THREE.LinePieces);
 	line.position.z -= z;
+	line.position.z += 3;
 	scene.add(line);
 }
 

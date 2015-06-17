@@ -435,11 +435,11 @@
 				   acceleration: new THREE.Vector3(0,0,0)
 				})
 				
-				player1.updateTexture(4, "forward");
+				player1.updateTexture(0, "forward");
 			//	player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
 				
 				/*Creates Goomba*/
-				for (var q = 0; q < 0; q++){
+				for (var q = 0; q < 2; q++){
 					GameObject.AddGlobalEntitiy({
 					   name:"Goomba",
 					   position: new THREE.Vector3(Math.random() * 	10, (Math.random() * 10) + 3,-1),
@@ -546,7 +546,7 @@
 				/*Renders scene to canvas*/
 				function render () {
 					GameObject.WorldGeom.FORAGE.material.uniforms["time"].value +=1;
-					renderer.render(scene, camera3dScroll);
+					renderer.render(scene, camera2d);
 				};
 			}
 			
@@ -562,7 +562,7 @@
 				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 				
-				raycaster.setFromCamera( mouse, camera3dScroll);
+				raycaster.setFromCamera( mouse, camera2d);
 
 				var objects = [];
 				objects[0] = GameObject.WorldGeom.STATIC;
