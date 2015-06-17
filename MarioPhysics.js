@@ -24,7 +24,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    switch (entity.playable){
       case true:
 			force.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
-			force.y += keyboard.pressed("W") ?  0.5 : 0;
+			force.y += keyboard.pressed("W") ? 0.2: 0;
 			force.x += keyboard.pressed("D") ?  0.01 : 0;
 			force.x += keyboard.pressed("A") ? -0.01 : 0;
 			entity.force.y = force.y;
@@ -80,6 +80,10 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 2)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)  , 2)].air) == false){collision.inside = true;};
+	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)+1, 1)].air) == false){collision.inside = true;};
+	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)+1, 2)].air) == false){collision.inside = true;};
+	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)+1, 1)].air) == false){collision.inside = true;};
+	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)+1, 2)].air) == false){collision.inside = true;};
 	   
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 1)].air) == false & entity.velocity.y >= 0){collision.x = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 2)].air) == false & entity.velocity.y >= 0){collision.x = true;};
