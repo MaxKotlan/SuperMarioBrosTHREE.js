@@ -2,7 +2,7 @@
 
 /*Function Initiates Physics*/
 GameObject.InitPhysics = function(){
-	GameObject.PhysicsRefreshRate = 1/60;
+	GameObject.PhysicsRefreshRate = 1/1000;
 	GameObject.PhysicsGravity = -9.931;
 	GameObject.PhysicsEntities = [];
 }
@@ -74,8 +74,11 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 		if (collision.inside == true){
 	//	   var bounciness = entity.restitution == 0 ? entity.velocity.y : entity.restitution;
 			
-			entity.position.set(entity.position.x+1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
-			entity.velocity.set(1*entity.velocity.x,-1*(entity.velocity.y/entity.restitution),0);
+			//entity.position.set(entity.position.x+1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
+			entity.position.x += -entity.position.x+Math.round(entity.position.x);
+			entity.position.y += -entity.position.y+Math.round(entity.position.y);
+		//	entity.velocity.x = 1*entity.velocity.x;
+			entity.velocity.y = -1*(entity.velocity.y/entity.restitution);
 			entity.position.x = entity.physicsRound == true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
 			entity.position.y = entity.physicsRound == true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
 			
