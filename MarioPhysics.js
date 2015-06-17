@@ -24,10 +24,11 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    switch (entity.playable){
       case true:
 			force.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
+			force.y += keyboard.pressed("W") ?  0.5 : 0;
+			force.x += keyboard.pressed("D") ?  0.01 : 0;
+			force.x += keyboard.pressed("A") ? -0.01 : 0;
 			entity.force.y = force.y;
-			entity.force.y += keyboard.pressed("W") ?  -1*force.y+0.5 : 0;
-			entity.force.x += keyboard.pressed("D") ?  0.001 : 0;
-			entity.force.x += keyboard.pressed("A") ? -0.001 : 0;
+			entity.force.x = force.x;
 			entity.velocity.add(entity.acceleration.copy(entity.force.divideScalar(entity.mass)));
 			entity.velocity.x = entity.velocity.x >  entity.Maxspeed ?  entity.Maxspeed : entity.velocity.x;
 			entity.velocity.x = entity.velocity.x < -entity.Maxspeed ? -entity.Maxspeed : entity.velocity.x;
@@ -35,8 +36,6 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
 			console.log(entity.velocity.x);
 			UpdateMeshAndBoundingBox(entity);
-			
-			
          break;
       case false:
 			entity.acceleration.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
@@ -79,6 +78,8 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	   var collision = {inside: false, x: false};
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 2)].air) == false){collision.inside = true;};
+	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
+	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)  , 2)].air) == false){collision.inside = true;};
 	   
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 1)].air) == false & entity.velocity.y >= 0){collision.x = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 2)].air) == false & entity.velocity.y >= 0){collision.x = true;};
