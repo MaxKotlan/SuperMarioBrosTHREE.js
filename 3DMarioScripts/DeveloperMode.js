@@ -1,7 +1,7 @@
 GameObject.Developer = {};
 
 GameObject.Developer.showGrids = function(map){
-	var step  =  1/16;
+	var step  =  1;
 	var geometry = new THREE.Geometry();
 	var material = new THREE.LineBasicMaterial({color: 0x000});
 	
