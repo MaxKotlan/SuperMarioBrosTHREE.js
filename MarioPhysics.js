@@ -24,8 +24,8 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    switch (entity.playable){
       case true:
 			force.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
-			force.y += keyboard.pressed("W") ? 0.2: 0;
-			force.x += keyboard.pressed("D") ?  0.01 : 0;
+			force.y += keyboard.pressed("W") ? 0.05: 0;
+			force.x += keyboard.pressed("D") ?  0.04 : 0;
 			force.x += keyboard.pressed("A") ? -0.01 : 0;
 			entity.force.y = force.y;
 			entity.force.x = force.x;
@@ -73,12 +73,17 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    function impulseResolution(collision, entity){
 		if (collision.inside == true){
 	//	   var bounciness = entity.restitution == 0 ? entity.velocity.y : entity.restitution;
+			/*
+			   entity.position = A
+			   Math.ceil(entity.position.x), Math.floor(entity.position.y) = B
+			   
+			   V=B-A
 			
+			*/
 			//entity.position.set(entity.position.x+1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
-			entity.position.x += -entity.position.x+Math.round(entity.position.x);
 			entity.position.y += -entity.position.y+Math.round(entity.position.y);
-		//	entity.velocity.x = 1*entity.velocity.x;
-			entity.velocity.y = -1*(entity.velocity.y/entity.restitution);
+			entity.velocity.x = -entity.restitution*entity.velocity.x;
+			entity.velocity.y = -entity.restitution*entity.velocity.y;
 			entity.position.x = entity.physicsRound == true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
 			entity.position.y = entity.physicsRound == true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
 			
