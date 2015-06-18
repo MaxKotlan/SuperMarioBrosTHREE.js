@@ -113,7 +113,6 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    	entity.boundingbox.position.copy(entity.position);
    	entity.boundingbox.position.y -= 0.5;
    	entity.boundingbox.position.x -= 0.5;
-	entity.boundingbox.position.z = 0.001;
    }
    
    /*Checks for collisions with all other entities and static geometry*/

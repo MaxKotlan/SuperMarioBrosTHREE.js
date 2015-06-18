@@ -78,7 +78,6 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox.position.copy(entity.position);
 	entity.boundingbox.position.y -= 0.5;
 	entity.boundingbox.position.x -= 0.5;
-	entity.boundingbox.position.z = 3;
 	
 	entity.boundingbox.geometry.computeFaceNormals();
 	entity.boundingbox.geometry.computeMorphNormals();

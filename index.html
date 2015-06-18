@@ -546,7 +546,7 @@
 				/*Renders scene to canvas*/
 				function render () {
 					GameObject.WorldGeom.FORAGE.material.uniforms["time"].value +=1;
-					renderer.render(scene, camera2d);
+					renderer.render(scene, camera3dScroll);
 				};
 			}
 			
@@ -562,7 +562,7 @@
 				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 				
-				raycaster.setFromCamera( mouse, camera2d);
+				raycaster.setFromCamera( mouse, camera3dScroll);
 
 				var objects = [];
 				objects[0] = GameObject.WorldGeom.STATIC;
