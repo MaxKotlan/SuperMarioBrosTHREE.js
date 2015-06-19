@@ -2,7 +2,7 @@
 
 /*Function Initiates Physics*/
 GameObject.InitPhysics = function(){
-	GameObject.PhysicsRefreshRate = 1/1000;
+	GameObject.PhysicsRefreshRate = 1/60;
 	GameObject.PhysicsGravity = -9.931;
 	GameObject.PhysicsEntities = [];
 }
@@ -20,9 +20,11 @@ GameObject.PhysicsUpdate = function(){
 /*Used to Calcualte the position of an object*/
 GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	var force = new THREE.Vector2(0,0);
+	entity.delta = entity.clock.getDelta();
    /*If the player is Human or NPC*/
    switch (entity.playable){
       case true:
+			console.log(entity.delta)
 			force.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
 			force.y += keyboard.pressed("W") ? 0.05: 0;
 			force.x += keyboard.pressed("D") ?  0.04 : 0;
@@ -82,7 +84,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 			*/
 			//entity.position.set(entity.position.x+1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
 			entity.position.y += -entity.position.y+Math.round(entity.position.y);
-			entity.velocity.x = -entity.restitution*entity.velocity.x;
+			entity.velocity.x =  entity.restitution*entity.velocity.x;
 			entity.velocity.y = -entity.restitution*entity.velocity.y;
 			entity.position.x = entity.physicsRound == true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
 			entity.position.y = entity.physicsRound == true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;

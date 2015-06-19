@@ -51,6 +51,7 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	
 	entityParameters = entityParameters !== undefined ? entityParameters : {};
 	
+	/*Dynamic Parameters. Should be able to be updated*/
 	entity.name  =        entityParameters.name         !== undefined ? entityParameters.name         : "Undefined";
 	entity.playable =     entityParameters.playable     !== undefined ? entityParameters.playable     : false;
 	entity.mesh  =        entityParameters.mesh         !== undefined ? entityParameters.mesh         : defaultmesh;
@@ -64,7 +65,10 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : new THREE.Vector3(0,0,0);
 	entity.acceleration = entityParameters.acceleration !== undefined ? entityParameters.acceleration : new THREE.Vector3(0,0,0);
 	entity.position =     entityParameters.position     !== undefined ? entityParameters.position     : new THREE.Vector3(0,0,0);
-
+	
+	/*Static Parameters that should not be updated as parameters*/
+	entity.clock = new THREE.Clock();
+	entity.delta = 0;
 	
 	entity.boundingbox.material.color = entity.playable == false ? new THREE.Color(0xff0000) : new THREE.Color(0x00ff00);
 //	entity.boundingbox.visible = false;
