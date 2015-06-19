@@ -2,19 +2,20 @@
 
 /*Function Initiates Physics*/
 GameObject.InitPhysics = function(){
-	GameObject.PhysicsRefreshRate = 1/60;
-	GameObject.PhysicsGravity = -9.931;
+	GameObject.PhysicsRefreshRate = 1/60; //don't understand why. 1/90 is actually 1/60. 1/60 takes .03 instead of .016. 1/90 is .016??? should be 0.011
+	GameObject.PhysicsGravity = -9.01;
 	GameObject.PhysicsEntities = [];
 }
 
 /*Loop That Calcualtes Game Physics*/
 GameObject.PhysicsUpdate = function(){
 	setTimeout(function(){
+	   var clock = new THREE.Clock();
 	   for (var i = 0; i < GameObject.PhysicsEntities.length; i++){
 	      GameObject.CalculatePhysicsFrameOfEntity(GameObject.PhysicsEntities[i]);
 	   }
 	   window.requestAnimationFrame(GameObject.PhysicsUpdate);
-	},(GameObject.PhysicsRefreshRate * 1000));
+	},(GameObject.PhysicsRefreshRate-clock.delta * 1000));
 }
 
 /*Used to Calcualte the position of an object*/
@@ -24,29 +25,57 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    /*If the player is Human or NPC*/
    switch (entity.playable){
       case true:
-			console.log(entity.delta)
-			force.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
-			force.y += keyboard.pressed("W") ? 0.05: 0;
-			force.x += keyboard.pressed("D") ?  0.04 : 0;
+			/*Calculate Force*/
+			force.y = GameObject.PhysicsGravity;
+			force.y += keyboard.pressed("W") ? 10.1: 0;
+			force.x += keyboard.pressed("D") ?  0.5 : 0;
 			force.x += keyboard.pressed("A") ? -0.01 : 0;
 			entity.force.y = force.y;
 			entity.force.x = force.x;
-			entity.velocity.add(entity.acceleration.copy(entity.force.divideScalar(entity.mass)));
-			entity.velocity.x = entity.velocity.x >  entity.Maxspeed ?  entity.Maxspeed : entity.velocity.x;
-			entity.velocity.x = entity.velocity.x < -entity.Maxspeed ? -entity.Maxspeed : entity.velocity.x;
-			entity.position.add(entity.velocity);
-			entity.position.x = entity.physicsRound === true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
-			entity.position.y = entity.physicsRound === true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
-		//	console.log(entity.position.x);
+			/*Calculate Position*/
+			var last_acceleration = entity.acceleration;
+			entity.position.x += entity.velocity.x * entity.delta + ( 0.5 * last_acceleration.x * Math.pow(entity.delta,2));
+			entity.position.y += entity.velocity.y * entity.delta + ( 0.5 * last_acceleration.y * Math.pow(entity.delta,2));
+			/*----Calculation for next frame starts here. Position has already been moved----*/
+			var new_acceleration = new THREE.Vector3(entity.force.x / entity.mass, entity.force.y / entity.mass, 0);
+			var avg_acceleration = new THREE.Vector3((last_acceleration.x + new_acceleration.x ) / 2,(last_acceleration.y + new_acceleration.y ) / 2,0);
+			entity.velocity.x += avg_acceleration.x * entity.delta;
+			entity.velocity.y += avg_acceleration.y * entity.delta;
+			console.log("delta: " + entity.delta);
+			console.log("newAccel: x:"+new_acceleration.x  +" y:"+new_acceleration.y  +" z:"+new_acceleration.z  );
+			console.log("LasAccel: x:"+last_acceleration.x +" y:"+last_acceleration.y +" z:"+last_acceleration.z );
+			console.log("avgAccel: x:"+avg_acceleration.x  +" y:"+avg_acceleration.y  +" z:"+avg_acceleration.z  );
+			console.log("velocity: x:"+entity.velocity.x   +" y:"+entity.velocity.y   +" z:"+entity.velocity.z   );
+			console.log("position: x:"+entity.position.x   +" y:"+entity.position.y   +" z:"+entity.position.z   );
+			console.log("------------------------------------         ");
+			entity.acceleration.copy(avg_acceleration);
+			
+			/*Max velocity, acceleration etc.*/
+		//	entity.velocity.x = entity.velocity.x >  entity.Maxspeed ?  entity.Maxspeed : entity.velocity.x;
+		//	entity.velocity.x = entity.velocity.x < -entity.Maxspeed ? -entity.Maxspeed : entity.velocity.x;
+		//	entity.position.x = entity.physicsRound === true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
+		//	entity.position.y = entity.physicsRound === true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
+		
 			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
-		//	console.log(entity.velocity.x);
 			UpdateMeshAndBoundingBox(entity);
          break;
       case false:
-			entity.acceleration.y = GameObject.PhysicsGravity * GameObject.PhysicsRefreshRate;
-            entity.position.add(entity.velocity.add(entity.acceleration));
-			entity.position.x = entity.physicsRound == true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
-			entity.position.y = entity.physicsRound == true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
+			force.y = GameObject.PhysicsGravity;
+			entity.force.y = force.y;
+			entity.force.x = force.x;
+			/*Calculate Position*/
+			var last_acceleration = entity.acceleration;
+			entity.position.x += entity.velocity.x * entity.delta + ( 0.5 * last_acceleration.x * Math.pow(entity.delta,2));
+			entity.position.y += entity.velocity.y * entity.delta + ( 0.5 * last_acceleration.y * Math.pow(entity.delta,2));
+			/*----Calculation for next frame starts here. Position has already been moved----*/
+			var new_acceleration = new THREE.Vector3(entity.force.x / entity.mass, entity.force.y / entity.mass, 0);
+			var avg_acceleration = new THREE.Vector3((last_acceleration.x + new_acceleration.x ) / 2,(last_acceleration.y + new_acceleration.y ) / 2,0);
+			entity.velocity.x += avg_acceleration.x * entity.delta;
+			entity.velocity.y += avg_acceleration.y * entity.delta;
+			entity.acceleration.copy(avg_acceleration);
+		//	
+		//	entity.position.x = entity.physicsRound == true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
+		//	entity.position.y = entity.physicsRound == true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
 			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
 			updateEntityAABB(entity);
 			UpdateMeshAndBoundingBox(entity);

@@ -439,13 +439,13 @@
 			//	player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
 				
 				/*Creates Goomba*/
-				for (var q = 0; q < 2; q++){
+				for (var q = 0; q < 4; q++){
 					GameObject.AddGlobalEntitiy({
 					   name:"Goomba",
 					   position: new THREE.Vector3(Math.random() * 	10, (Math.random() * 10) + 3,-1),
 					   mesh: GameObject.CreateGoomba(),
 					   playable: false,
-					   velocity: new THREE.Vector3(1/16,0,0),
+					   velocity: new THREE.Vector3(1,0,0),
 					   acceleration: new THREE.Vector3(0,0,0),
 					   restitution: 1
 					})
