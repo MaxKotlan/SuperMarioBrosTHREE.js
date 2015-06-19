@@ -15,7 +15,7 @@ GameObject.PhysicsUpdate = function(){
 	      GameObject.CalculatePhysicsFrameOfEntity(GameObject.PhysicsEntities[i]);
 	   }
 	   window.requestAnimationFrame(GameObject.PhysicsUpdate);
-	},(GameObject.PhysicsRefreshRate-clock.delta * 1000));
+	},((GameObject.PhysicsRefreshRate-clock.delta) * 1000));
 }
 
 /*Used to Calcualte the position of an object*/
@@ -41,13 +41,13 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 			var avg_acceleration = new THREE.Vector3((last_acceleration.x + new_acceleration.x ) / 2,(last_acceleration.y + new_acceleration.y ) / 2,0);
 			entity.velocity.x += avg_acceleration.x * entity.delta;
 			entity.velocity.y += avg_acceleration.y * entity.delta;
-			console.log("delta: " + entity.delta);
-			console.log("newAccel: x:"+new_acceleration.x  +" y:"+new_acceleration.y  +" z:"+new_acceleration.z  );
-			console.log("LasAccel: x:"+last_acceleration.x +" y:"+last_acceleration.y +" z:"+last_acceleration.z );
-			console.log("avgAccel: x:"+avg_acceleration.x  +" y:"+avg_acceleration.y  +" z:"+avg_acceleration.z  );
-			console.log("velocity: x:"+entity.velocity.x   +" y:"+entity.velocity.y   +" z:"+entity.velocity.z   );
-			console.log("position: x:"+entity.position.x   +" y:"+entity.position.y   +" z:"+entity.position.z   );
-			console.log("------------------------------------         ");
+				console.log("delta: " + entity.delta);
+				//console.log("newAccel: x:"+new_acceleration.x  +" y:"+new_acceleration.y  +" z:"+new_acceleration.z  );
+				//console.log("LasAccel: x:"+last_acceleration.x +" y:"+last_acceleration.y +" z:"+last_acceleration.z );
+				//console.log("avgAccel: x:"+avg_acceleration.x  +" y:"+avg_acceleration.y  +" z:"+avg_acceleration.z  );
+				//console.log("velocity: x:"+entity.velocity.x   +" y:"+entity.velocity.y   +" z:"+entity.velocity.z   );
+				//console.log("position: x:"+entity.position.x   +" y:"+entity.position.y   +" z:"+entity.position.z   );
+				console.log("------------------------------------         ");
 			entity.acceleration.copy(avg_acceleration);
 			
 			/*Max velocity, acceleration etc.*/
