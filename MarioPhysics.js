@@ -3,7 +3,7 @@
 /*Function Initiates Physics*/
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60; //don't understand why. 1/90 is actually 1/60. 1/60 takes .03 instead of .016. 1/90 is .016??? should be 0.011
-	GameObject.PhysicsGravity = -9.01;
+	GameObject.PhysicsGravity = -9.81;
 	GameObject.PhysicsEntities = [];
 }
 
@@ -41,13 +41,13 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 			var avg_acceleration = new THREE.Vector3((last_acceleration.x + new_acceleration.x ) / 2,(last_acceleration.y + new_acceleration.y ) / 2,0);
 			entity.velocity.x += avg_acceleration.x * entity.delta;
 			entity.velocity.y += avg_acceleration.y * entity.delta;
-				console.log("delta: " + entity.delta);
+				//console.log("delta: " + entity.delta);
 				//console.log("newAccel: x:"+new_acceleration.x  +" y:"+new_acceleration.y  +" z:"+new_acceleration.z  );
 				//console.log("LasAccel: x:"+last_acceleration.x +" y:"+last_acceleration.y +" z:"+last_acceleration.z );
 				//console.log("avgAccel: x:"+avg_acceleration.x  +" y:"+avg_acceleration.y  +" z:"+avg_acceleration.z  );
 				//console.log("velocity: x:"+entity.velocity.x   +" y:"+entity.velocity.y   +" z:"+entity.velocity.z   );
 				//console.log("position: x:"+entity.position.x   +" y:"+entity.position.y   +" z:"+entity.position.z   );
-				console.log("------------------------------------         ");
+				//console.log("------------------------------------         ");
 			entity.acceleration.copy(avg_acceleration);
 			
 			/*Max velocity, acceleration etc.*/
@@ -103,6 +103,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    
    function impulseResolution(collision, entity){
 		if (collision.inside == true){
+			/*Needs to be rewritten. Can't figure out what a collision normal is.*/
 	//	   var bounciness = entity.restitution == 0 ? entity.velocity.y : entity.restitution;
 			/*
 			   entity.position = A
@@ -117,7 +118,11 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 			entity.velocity.y = -entity.restitution*entity.velocity.y;
 			entity.position.x = entity.physicsRound == true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
 			entity.position.y = entity.physicsRound == true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
-			
+		 
+		//	var e = entity.restitution;
+		//	var impulse_momentum = entity.velocity.multiplyScalar(entity.mass);
+		//	entity.position.add(impulse_momentum.multiplyScalar(-e*entity.delta));
+		//last_acceleration;
 		}
    }
    

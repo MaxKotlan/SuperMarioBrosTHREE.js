@@ -58,7 +58,7 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.boundingbox =  entityParameters.boundingbox  !== undefined ? entityParameters.boundingbox  : defaultmesh;
 	entity.force =        entityParameters.force        !== undefined ? entityParameters.force        : new THREE.Vector3(0,0,0);
 	entity.mass  =        entityParameters.mass         !== undefined ? entityParameters.mass         : 1;
-	entity.restitution =  entityParameters.restitution  !== undefined ? entityParameters.restitution  : 1; //0-1 MULTIPLYER, 1- INFINITE BOUNCE,
+	entity.restitution =  entityParameters.restitution  !== undefined ? entityParameters.restitution  : 0.9; //0-1 MULTIPLYER, 1- INFINITE BOUNCE,
 	entity.Maxspeed =     entityParameters.Maxspeed     !== undefined ? entityParameters.Maxspeed     : 0.1;
 	entity.physicsRound = entityParameters.physicsRound !== undefined ? entityParameters.physicsRound : true;
 	entity.RoundingNumber=entityParameters.RoundingNumber!== undefined ? entityParameters.RoundingNumber : 16;
