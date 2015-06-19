@@ -15,7 +15,7 @@ GameObject.PhysicsUpdate = function(){
 	      GameObject.CalculatePhysicsFrameOfEntity(GameObject.PhysicsEntities[i]);
 	   }
 	   window.requestAnimationFrame(GameObject.PhysicsUpdate);
-	},((GameObject.PhysicsRefreshRate-clock.delta) * 1000));
+	},(GameObject.PhysicsRefreshRate-clock.delta * 1000));
 }
 
 /*Used to Calcualte the position of an object*/
