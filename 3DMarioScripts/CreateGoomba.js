@@ -3,7 +3,7 @@ GameObject.CreateGoomba = function(){
 		var geometry = GameObject.CreatePhysicsGeometry();
 	console.log(geometry);
 	//	var material = new THREE.MeshBasicMaterial({color:0xFF0000, wireframe:true});
-		var material = new THREE.MeshLambertMaterial({map: GameObject.GoombaTextureMap,  color: 0xFFFFFF, alphaTest: 0.5, side: THREE.DoubleSide});
+		var material = new THREE.MeshBasicMaterial({map: GameObject.GoombaTextureMap,  color: 0xFFFFFF, alphaTest: 0.5, side: THREE.DoubleSide});
 		var goomba = {};
 		
 		GameObject.UpdateSpriteFrame(geometry, 0);
