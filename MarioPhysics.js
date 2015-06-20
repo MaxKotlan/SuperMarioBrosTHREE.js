@@ -4,6 +4,7 @@
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60; //don't understand why. 1/90 is actually 1/60. 1/60 takes .03 instead of .016. 1/90 is .016??? should be 0.011
 	GameObject.PhysicsGravity = -9.81;
+	GameObject.TimeScale = 0.5;
 	GameObject.PhysicsEntities = [];
 }
 
@@ -22,14 +23,15 @@ GameObject.PhysicsUpdate = function(){
 GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	var force = new THREE.Vector2(0,0);
 	entity.delta = entity.clock.getDelta();
+	entity.delta = entity.delta * GameObject.TimeScale;
    /*If the player is Human or NPC*/
    switch (entity.playable){
       case true:
 			/*Calculate Force*/
 			force.y = GameObject.PhysicsGravity;
-			force.y += keyboard.pressed("W") ? 10.1: 0;
-			force.x += keyboard.pressed("D") ?  0.5 : 0;
-			force.x += keyboard.pressed("A") ? -0.01 : 0;
+			force.y += keyboard.pressed("W") ? 19.0: 0;
+			force.x += keyboard.pressed("D") ?  10 : 0;
+			force.x += keyboard.pressed("A") ? -10 : 0;
 			entity.force.y = force.y;
 			entity.force.x = force.x;
 			/*Calculate Position*/
