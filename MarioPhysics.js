@@ -4,7 +4,7 @@
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60; //don't understand why. 1/90 is actually 1/60. 1/60 takes .03 instead of .016. 1/90 is .016??? should be 0.011
 	GameObject.PhysicsGravity = -9.81;
-	GameObject.TimeScale = 0.5;
+	GameObject.TimeScale = 0.1;
 	GameObject.PhysicsEntities = [];
 }
 
