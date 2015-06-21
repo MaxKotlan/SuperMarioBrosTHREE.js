@@ -18,9 +18,8 @@ GameObject.CreateGoomba = function(){
 		mesh.castShadow = true;
 		mesh.receiveShadow = true;
 		mesh.customDepthMaterial = new THREE.ShaderMaterial( { uniforms: uniforms, vertexShader: vertexShader, fragmentShader: fragmentShader } );
-		
-		goomba.mesh = mesh;
-		return goomba.mesh;
+
+		return mesh;
 }
 
 GameObject.GetGoombaMaterial = function(materialID, u, v){

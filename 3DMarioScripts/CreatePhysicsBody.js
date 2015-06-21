@@ -50,7 +50,6 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	defaultmesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { wireframe : true } ));
 	
 	entityParameters = entityParameters !== undefined ? entityParameters : {};
-	
 	/*Dynamic Parameters. Should be able to be updated*/
 	entity.name  =        entityParameters.name         !== undefined ? entityParameters.name         : "Undefined";
 	entity.playable =     entityParameters.playable     !== undefined ? entityParameters.playable     : false;
@@ -69,7 +68,19 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	/*Static Parameters that should not be updated as parameters*/
 	entity.clock = new THREE.Clock();
 	entity.delta = 0;
+	entity.upad = 0;
 	
+	entity.loop = function(){
+		setTimeout(function(){
+			entity.upad += 1;
+			if (entity.upad > 1){entity.upad = 0;}
+			console.log(entity);
+			GameObject.UpdateSpriteFrame(entity.mesh.geometry, entity.upad);
+			window.requestAnimationFrame(entity.loop);
+		}, (175 / GameObject.TimeScale));
+	}
+
+	entity.loop();
 	entity.boundingbox.material.color = entity.playable == false ? new THREE.Color(0xff0000) : new THREE.Color(0x00ff00);
 //	entity.boundingbox.visible = false;
 	
