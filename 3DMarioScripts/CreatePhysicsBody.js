@@ -50,6 +50,8 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	defaultmesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { wireframe : true } ));
 	
 	entityParameters = entityParameters !== undefined ? entityParameters : {};
+	entity.normals   = entity.normals   !== undefined ? entity.normals   : {};
+	
 	
 	/*Dynamic Parameters. Should be able to be updated*/
 	entity.name  =        entityParameters.name         !== undefined ? entityParameters.name         : "Undefined";
@@ -60,6 +62,7 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	entity.mass  =        entityParameters.mass         !== undefined ? entityParameters.mass         : 1;
 	entity.restitution =  entityParameters.restitution  !== undefined ? entityParameters.restitution  : 0.9; //0-1 MULTIPLYER, 1- INFINITE BOUNCE,
 	entity.Maxspeed =     entityParameters.Maxspeed     !== undefined ? entityParameters.Maxspeed     : 0.1;
+	entity.normals  =     entityParameters.normals      !== undefined ? entityParameters.normals : 16;
 	entity.physicsRound = entityParameters.physicsRound !== undefined ? entityParameters.physicsRound : true;
 	entity.RoundingNumber=entityParameters.RoundingNumber!== undefined ? entityParameters.RoundingNumber : 16;
 	entity.velocity =     entityParameters.velocity     !== undefined ? entityParameters.velocity     : new THREE.Vector3(0,0,0);

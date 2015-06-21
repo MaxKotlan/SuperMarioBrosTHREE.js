@@ -4,7 +4,7 @@
 GameObject.InitPhysics = function(){
 	GameObject.PhysicsRefreshRate = 1/60; //don't understand why. 1/90 is actually 1/60. 1/60 takes .03 instead of .016. 1/90 is .016??? should be 0.011
 	GameObject.PhysicsGravity = -9.81;
-	GameObject.TimeScale = 0.1;
+	GameObject.TimeScale = 1;
 	GameObject.PhysicsEntities = [];
 }
 
@@ -75,7 +75,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 			entity.velocity.x += avg_acceleration.x * entity.delta;
 			entity.velocity.y += avg_acceleration.y * entity.delta;
 			entity.acceleration.copy(avg_acceleration);
-		//	
+		//
 		//	entity.position.x = entity.physicsRound == true ? Math.max( Math.round(entity.position.x * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.x;
 		//	entity.position.y = entity.physicsRound == true ? Math.max( Math.round(entity.position.y * entity.RoundingNumber) / entity.RoundingNumber, 2.8 ) : entity.position.y;
 			impulseResolution(checkBlockUsingVoxelMap(entity), entity);
@@ -105,16 +105,16 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
    
    function impulseResolution(collision, entity){
 		if (collision.inside == true){
-			/*Needs to be rewritten. Can't figure out what a collision normal is.*/
-	//	   var bounciness = entity.restitution == 0 ? entity.velocity.y : entity.restitution;
-			/*
-			   entity.position = A
-			   Math.ceil(entity.position.x), Math.floor(entity.position.y) = B
-			   
-			   V=B-A
-			
-			*/
-			//entity.position.set(entity.position.x+1*entity.velocity.x,entity.position.y+-1*entity.velocity.y,entity.position.z);
+         
+         var normal = getNormals(entity);
+	      
+	      var fnorm = normal.up.x < Math.floor(entity.position.y) ? new THREE.Vector2(1,-1) :
+         fnorm = normal.dn.x > Math.floor(entity.position.y) ? new THREE.Vector2(1,-1) :
+         fnorm = normal.lt.x < Math.ceil(entity.position.x)  ? new THREE.Vector2(-1,1) :
+         fnorm = normal.rt.x > Math.ceil(entity.position.x)  ? new THREE.Vector2(-1,1) :
+         
+         console.log(fnorm);
+         
 			entity.position.y += -entity.position.y+Math.round(entity.position.y);
 			entity.velocity.x =  entity.restitution*entity.velocity.x;
 			entity.velocity.y = -entity.restitution*entity.velocity.y;
@@ -128,8 +128,20 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 		}
    }
    
+   function getNormals(entity){
+      var normal = {};
+      
+      normal.up = new THREE.Vector2(entity.position.x+0.5, entity.position.y+1.0);
+      normal.dn = new THREE.Vector2(entity.position.x+0.5, entity.position.y    );
+      normal.lt = new THREE.Vector2(entity.position.x    , entity.position.y+0.5);
+      normal.rt = new THREE.Vector2(entity.position.x+1.0, entity.position.y+0.5);
+      
+      return normal;
+   }
+   
    function checkBlockUsingVoxelMap(entity){
-	   var collision = {inside: false, x: false};
+	   var collision = {inside: false};
+	   
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)  , 2)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)  , 1)].air) == false){collision.inside = true;};
@@ -138,6 +150,7 @@ GameObject.CalculatePhysicsFrameOfEntity = function(entity){
 	   if ((map[getblock(Math.ceil(entity.position.x)  , Math.floor(entity.position.y)+1, 2)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)+1, 1)].air) == false){collision.inside = true;};
 	   if ((map[getblock(Math.ceil(entity.position.x)-1, Math.floor(entity.position.y)+1, 2)].air) == false){collision.inside = true;};
+	   
 	   
 	   return collision;
    }
