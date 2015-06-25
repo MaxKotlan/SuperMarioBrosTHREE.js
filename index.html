@@ -426,35 +426,39 @@
 				/*Creates Player(s)*/
 				player1 = new GameObject.Player();
 				console.log(player1.mesh);
-				for (var j = 0; j < 1; j++){
-				GameObject.AddGlobalEntitiy({
-				   name:"Mario",
-				   position: new THREE.Vector3(Math.random() * 3,10,-1),
-				   mesh: player1.mesh,
-				   playable: true,
-				   velocity: new THREE.Vector3(0,0,0),
-				   acceleration: new THREE.Vector3(0,0,0),
-				   restitution: 0.2
-				})
+				var numberOfMario = 1;
+				numberOfMario += GameObject.PhysicsEntities.length;
+				for (var j = GameObject.PhysicsEntities.length; j < numberOfMario; j++){
+					GameObject.AddGlobalEntitiy({
+					   name:"Mario",
+					   position: new THREE.Vector3(Math.random() * 3,10,-1),
+					   mesh: player1.mesh,
+					   playable: true,
+					   velocity: new THREE.Vector3(0,0,0),
+					   acceleration: new THREE.Vector3(0,0,0),
+					   restitution: 1
+					});
 				}
 				
 				player1.updateTexture(0, "forward");
 			//	player2 = new GameObject.Player(new THREE.Vector3(9, 9.5, 0.5));
 				
 				/*Creates Goomba*/
-				
-				for (var q = 0; q < 100; q++){
+				var numberOfGoombas = 4;
+				numberOfGoombas += GameObject.PhysicsEntities.length;
+				for (var q = GameObject.PhysicsEntities.length; q < numberOfGoombas; q++){
+					var params = GameObject.CreateGoomba();
 					GameObject.AddGlobalEntitiy({
 					   name:"Goomba",
 					   position: new THREE.Vector3(Math.random() * 	20, (Math.random() * 12) + 3,-1),
-					   mesh: GameObject.CreateGoomba(),
+					   mesh: params.mesh,
 					   playable: false,
 					   velocity: new THREE.Vector3(1,0,0),
 					   acceleration: new THREE.Vector3(0,0,0),
-					   restitution: 1
-					})
+					   restitution: 0.4
+					});
 				}
-				
+
 		//		GameObject.Developer.showGrids();
 				
 				/*Creates Block reticle*/

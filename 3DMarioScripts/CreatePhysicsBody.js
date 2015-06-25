@@ -70,19 +70,19 @@ GameObject.AddGlobalEntitiy = function(entityParameters){
 	/*Static Parameters that should not be updated as parameters*/
 	entity.clock = new THREE.Clock();
 	entity.delta = 0;
-	entity.upad = 0;
 	
-	entity.loop = function(){
-		setTimeout(function(){
-			entity.upad += 1;
-			if (entity.upad > 1){entity.upad = 0;}
-			console.log(entity);
-			GameObject.UpdateSpriteFrame(entity.mesh.geometry, entity.upad);
-			window.requestAnimationFrame(entity.loop);
-		}, (175 / GameObject.TimeScale));
-	}
+	entity.addparameters = function(o2){
+	  var o1 = entity;
+	  if (o1 == null || o2 == null)
+		return o1;
 
-	entity.loop();
+	  for (var key in o2)
+		if (o2.hasOwnProperty(key))
+		  o1[key] = o2[key];
+
+	  entity = o1;
+	}
+	
 	entity.boundingbox.material.color = entity.playable == false ? new THREE.Color(0xff0000) : new THREE.Color(0x00ff00);
 //	entity.boundingbox.visible = false;
 	

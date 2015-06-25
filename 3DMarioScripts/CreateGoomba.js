@@ -18,8 +18,22 @@ GameObject.CreateGoomba = function(){
 		mesh.castShadow = true;
 		mesh.receiveShadow = true;
 		mesh.customDepthMaterial = new THREE.ShaderMaterial( { uniforms: uniforms, vertexShader: vertexShader, fragmentShader: fragmentShader } );
-
-		return mesh;
+		
+		var goombaParams = {};
+		
+		goombaParams.mesh = mesh;
+		goombaParams.upad = 0;
+		goombaParams.loop = function(){
+			setTimeout(function(){
+				entity.upad += 1;
+				if (entity.upad > 1){entity.upad = 0;}
+				console.log(entity);
+				GameObject.UpdateSpriteFrame(entity.mesh.geometry, entity.upad);
+				window.requestAnimationFrame(entity.loop);
+			}, (175 / GameObject.TimeScale));
+		}
+		
+		return goombaParams;
 }
 
 GameObject.GetGoombaMaterial = function(materialID, u, v){
